@@ -63,6 +63,7 @@
     <nav>
       <a href="#bio">Bio</a>
       <a href="#stats">Stats</a>
+      <a href="#pace-chart">HR Pace</a>
       <a href="#facts">Fun Facts</a>
     </nav>
   </header>
@@ -84,6 +85,11 @@
     </div>
   </section>
 
+  <section id="pace-chart">
+    <h2>HR Pace vs. Historic Seasons</h2>
+    <canvas id="hrChart" width="400" height="250"></canvas>
+  </section>
+
   <section id="facts">
     <h2>Fun Facts</h2>
     <ul>
@@ -101,6 +107,7 @@
     Made with ❤ by Mariners fans.
   </footer>
 
+  <script src="js/chart.min.js"></script>
   <script>
     async function loadStats() {
       try {
@@ -117,9 +124,30 @@
           <div>Batting Avg: <strong>${avg}</strong></div>
           <div>Projected HRs (162g pace): <strong>${pace}</strong></div>
         `;
+        drawChart(pace);
       } catch (err) {
         document.getElementById('stats-container').innerText = 'Stats unavailable.';
       }
+    }
+
+    function drawChart(pace) {
+      const ctx = document.getElementById('hrChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Barry Bonds 2001', 'Roger Maris 1961', 'Aaron Judge 2022', 'Cal Raleigh 2024'],
+          datasets: [{
+            label: 'Home Runs',
+            data: [73, 61, 62, parseFloat(pace)],
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0']
+          }]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
     }
 
     loadStats();
