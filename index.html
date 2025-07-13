@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cal Raleigh HR Tracker</title>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0c162f;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 { color: #ff4c00; }
+    .stat { font-size: 1.5em; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>🦈 Cal Raleigh HR Tracker</h1>
+  <div id="stats">
+    <div class="stat">Loading...</div>
+  </div>
+
+  <script>
+    async function fetchStats() {
+      const res = await fetch("https://statsapi.mlb.com/api/v1/people/663728/stats?stats=season&group=hitting");
+      const data = await res.json();
+      const stats = data.stats[0].splits[0].stat;
+
+      const games = parseInt(stats.gamesPlayed);
+      const homers = parseInt(stats.homeRuns);
+      const pace = ((homers / games) * 162).toFixed(1);
+
+      document.getElementById('stats').innerHTML = `
+        <div class="stat">💣 Home Runs: <strong>${homers}</strong></div>
+        <div class="stat">📅 Games Played: <strong>${games}</strong></div>
+        <div class="stat">📈 HR Pace (162g): <strong>${pace}</strong></div>
+      `;
+    }
+
+    fetchStats();
+  </script>
+</body>
+</html>
