@@ -124,33 +124,81 @@
           <div>Batting Avg: <strong>${avg}</strong></div>
           <div>Projected HRs (162g pace): <strong>${pace}</strong></div>
         `;
-        drawChart(pace);
       } catch (err) {
         document.getElementById('stats-container').innerText = 'Stats unavailable.';
       }
     }
 
-    function drawChart(pace) {
+    async function fetchGameLog(id, season) {
+      const res = await fetch(`https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=gameLog&season=${season}&group=hitting`);
+      const data = await res.json();
+      return data.stats[0].splits.map(s => parseInt(s.stat.homeRuns, 10));
+    }
+
+    function rollingPace(hrByGame) {
+      const out = [];
+      for (let i = 0; i < hrByGame.length; i++) {
+        const start = Math.max(0, i - 2);
+        const slice = hrByGame.slice(start, i + 1);
+        const avg = slice.reduce((a, b) => a + b, 0) / slice.length;
+        out.push(avg * 162);
+      }
+      return out;
+    }
+
+    async function drawChart() {
+      const players = [
+        { label: 'Bonds01', id: 111188, season: 2001, color: '#ff6384' },
+        { label: 'Judge22', id: 592450, season: 2022, color: '#36a2eb' },
+        { label: 'Judge24', id: 592450, season: 2024, color: '#ffcd56' },
+        { label: 'Cal24', id: 663728, season: 2024, color: '#4bc0c0' }
+      ];
+
+      const logs = await Promise.all(players.map(p => fetchGameLog(p.id, p.season)));
+      const maxLen = Math.max(...logs.map(l => l.length));
+      const labels = Array.from({ length: maxLen }, (_, i) => i + 1);
+
+      const datasets = logs.map((log, i) => ({
+        label: players[i].label,
+        data: rollingPace(log),
+        borderColor: players[i].color,
+        tension: 0.3,
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 0
+      }));
+
+      datasets.push({
+        label: '63 HRs',
+        data: Array.from({ length: maxLen }, () => 63),
+        borderColor: '#666',
+        borderDash: [5, 5],
+        borderWidth: 1,
+        pointRadius: 0,
+        fill: false
+      });
+
       const ctx = document.getElementById('hrChart').getContext('2d');
       new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Barry Bonds 2001', 'Roger Maris 1961', 'Aaron Judge 2022', 'Cal Raleigh 2024'],
-          datasets: [{
-            label: 'Home Runs',
-            data: [73, 61, 62, parseFloat(pace)],
-            backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0']
-          }]
-        },
+        type: 'line',
+        data: { labels, datasets },
         options: {
           scales: {
-            y: { beginAtZero: true }
+            x: { title: { display: true, text: '# of team games into the season' } },
+            y: {
+              title: { display: true, text: 'HR pace (3-game rolling average)' },
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            title: { display: true, text: 'Home Run pace throughout the season' }
           }
         }
       });
     }
 
     loadStats();
+    drawChart();
   </script>
 </body>
 </html>
