@@ -1,6 +1,6 @@
 # choggers.com
 dumpy time
 
-## Updating HR logs
+## Updating stats
 
-Run `./fetch_logs.sh` to refresh `js/hr_data.json` with the latest home run logs. The script uses `curl`, `jq`, and Node.js to download and process data from MLB's Stats API.
+Run `./fetch_logs.sh` to refresh the data files. This script downloads game logs from MLB's Stats API and outputs `js/cal_stats.json` used by the website's graphs.
