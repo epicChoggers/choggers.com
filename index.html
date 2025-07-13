@@ -55,7 +55,7 @@
     a.external {
       color: #4ba3ff;
     }
-    #hrChart {
+    canvas {
       width: 100%;
       height: 400px;
     }
@@ -67,7 +67,7 @@
     <nav>
       <a href="#bio">Bio</a>
       <a href="#stats">Stats</a>
-      <a href="#pace-chart">HR Pace</a>
+      <a href="#breakdown">Breakdown</a>
       <a href="#facts">Fun Facts</a>
     </nav>
   </header>
@@ -89,9 +89,14 @@
     </div>
   </section>
 
-  <section id="pace-chart">
-    <h2>HR Pace vs. Historic Seasons</h2>
-    <canvas id="hrChart"></canvas>
+  <section id="breakdown">
+    <h2>2024 Breakdown</h2>
+    <h3>Home Runs by Opponent</h3>
+    <canvas id="teamsChart"></canvas>
+    <h3>Home Runs by Batting Side</h3>
+    <canvas id="sideChart"></canvas>
+    <h3>Home vs Away</h3>
+    <canvas id="homeAwayChart"></canvas>
   </section>
 
   <section id="facts">
@@ -132,98 +137,38 @@
         document.getElementById('stats-container').innerText = 'Stats unavailable.';
       }
     }
-
-    async function loadHRLogs() {
-      const res = await fetch('js/hr_data.json');
+    async function loadCalStats() {
+      const res = await fetch("js/cal_stats.json");
       return res.json();
     }
 
-    function rollingPace(hrByGame) {
-      const out = [];
-      for (let i = 0; i < hrByGame.length; i++) {
-        if (hrByGame[i] == null) {
-          out.push(null);
-          continue;
-        }
-        const start = Math.max(0, i - 2);
-        const slice = hrByGame.slice(start, i + 1).filter(v => v != null);
-        const avg = slice.reduce((a, b) => a + b, 0) / slice.length;
-        out.push(avg * 162);
-      }
-      return out;
+    function chartTeams(ctx, stats) {
+      const labels = Object.keys(stats.byTeam);
+      const data = labels.map(t => stats.byTeam[t].hr);
+      new Chart(ctx, { type: "bar", data: { labels, datasets: [{ label: "HRs", data, backgroundColor: "#4bc0c0" }] }, options: { responsive: true, maintainAspectRatio: false } });
     }
 
-    async function drawChart() {
-      const players = [
-        { key: 'bonds01', label: 'Bonds01', color: '#ff6384' },
-        { key: 'judge22', label: 'Judge22', color: '#36a2eb' },
-        { key: 'judge24', label: 'Judge24', color: '#ffcd56' },
-        { key: 'cal24', label: 'Cal24', color: '#4bc0c0' }
-      ];
+    function chartSide(ctx, stats) {
+      const labels = ["Lefty", "Righty"];
+      const data = [stats.vsSide.L.hr, stats.vsSide.R.hr];
+      new Chart(ctx, { type: "pie", data: { labels, datasets: [{ data, backgroundColor: ["#ff6384", "#36a2eb"] }] }, options: { responsive: true, maintainAspectRatio: false } });
+    }
 
-      const data = await loadHRLogs();
-      const logs = players.map(p => data[p.key]);
-      const maxLen = Math.max(...logs.map(l => l.length));
-      const labels = Array.from({ length: maxLen }, (_, i) => i + 1);
+    function chartHomeAway(ctx, stats) {
+      const labels = ["Home", "Away"];
+      const data = [stats.homeAway.home.hr, stats.homeAway.away.hr];
+      new Chart(ctx, { type: "pie", data: { labels, datasets: [{ data, backgroundColor: ["#ffcd56", "#9966ff"] }] }, options: { responsive: true, maintainAspectRatio: false } });
+    }
 
-      const datasets = logs.map((log, i) => ({
-        label: players[i].label,
-        data: rollingPace(log),
-        borderColor: players[i].color,
-        tension: 0.3,
-        borderWidth: 2,
-        fill: false,
-        pointRadius: 0
-      }));
-
-      datasets.push({
-        label: '63 HRs',
-        data: Array.from({ length: maxLen }, () => 63),
-        borderColor: '#666',
-        borderDash: [5, 5],
-        borderWidth: 1,
-        pointRadius: 0,
-        fill: false
-      });
-
-      const ctx = document.getElementById('hrChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: { labels, datasets },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          spanGaps: true,
-          layout: {
-            padding: 20
-          },
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: '# of team games into the season'
-              }
-            },
-            y: {
-              title: {
-                display: true,
-                text: 'HR pace (3-game rolling average)'
-              },
-              beginAtZero: true
-            }
-          },
-          plugins: {
-            title: {
-              display: true,
-              text: 'Home Run pace throughout the season'
-            }
-          }
-        }
-      });
+    async function drawBreakdown() {
+      const stats = await loadCalStats();
+      chartTeams(document.getElementById("teamsChart").getContext("2d"), stats);
+      chartSide(document.getElementById("sideChart").getContext("2d"), stats);
+      chartHomeAway(document.getElementById("homeAwayChart").getContext("2d"), stats);
     }
 
     loadStats();
-    drawChart();
+    drawBreakdown();
   </script>
 </body>
 </html>

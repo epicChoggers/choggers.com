@@ -17,4 +17,6 @@ for info in "${players[@]}"; do
 done
 node scripts/parse_logs.js
 echo "Data saved to js/hr_data.json"
+node scripts/build_cal_stats.js
+echo "Data saved to js/cal_stats.json"
 rm -r tmp
