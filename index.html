@@ -129,17 +129,20 @@
       }
     }
 
-    async function fetchGameLog(id, season) {
-      const res = await fetch(`https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=gameLog&season=${season}&group=hitting`);
-      const data = await res.json();
-      return data.stats[0].splits.map(s => parseInt(s.stat.homeRuns, 10));
+    async function loadHRLogs() {
+      const res = await fetch('js/hr_data.json');
+      return res.json();
     }
 
     function rollingPace(hrByGame) {
       const out = [];
       for (let i = 0; i < hrByGame.length; i++) {
+        if (hrByGame[i] == null) {
+          out.push(null);
+          continue;
+        }
         const start = Math.max(0, i - 2);
-        const slice = hrByGame.slice(start, i + 1);
+        const slice = hrByGame.slice(start, i + 1).filter(v => v != null);
         const avg = slice.reduce((a, b) => a + b, 0) / slice.length;
         out.push(avg * 162);
       }
@@ -148,13 +151,14 @@
 
     async function drawChart() {
       const players = [
-        { label: 'Bonds01', id: 111188, season: 2001, color: '#ff6384' },
-        { label: 'Judge22', id: 592450, season: 2022, color: '#36a2eb' },
-        { label: 'Judge24', id: 592450, season: 2024, color: '#ffcd56' },
-        { label: 'Cal24', id: 663728, season: 2024, color: '#4bc0c0' }
+        { key: 'bonds01', label: 'Bonds01', color: '#ff6384' },
+        { key: 'judge22', label: 'Judge22', color: '#36a2eb' },
+        { key: 'judge24', label: 'Judge24', color: '#ffcd56' },
+        { key: 'cal24', label: 'Cal24', color: '#4bc0c0' }
       ];
 
-      const logs = await Promise.all(players.map(p => fetchGameLog(p.id, p.season)));
+      const data = await loadHRLogs();
+      const logs = players.map(p => data[p.key]);
       const maxLen = Math.max(...logs.map(l => l.length));
       const labels = Array.from({ length: maxLen }, (_, i) => i + 1);
 
