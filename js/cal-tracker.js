@@ -28,32 +28,65 @@ async function loadHrChart() {
   const year = currentYear();
   const data = await fetchJSON(`https://statsapi.mlb.com/api/v1/people/663728/stats?stats=gameLog&season=${year}&group=hitting`);
   const logs = data.stats?.[0]?.splits || [];
-  const labels = logs.map((l, i) => i + 1);
-  const totals = [];
+  const calTotals = [];
   let sum = 0;
   for (const l of logs) {
     sum += Number(l.stat.homeRuns);
-    totals.push(sum);
+    calTotals.push(sum);
   }
+
+  const hist = await fetchJSON('js/hr_data.json');
+  const players = [
+    { key: 'bonds01', label: 'Barry Bonds 2001', color: '#6f42c1' },
+    { key: 'judge22', label: 'Aaron Judge 2022', color: '#1f77b4' },
+    { key: 'judge24', label: 'Aaron Judge 2024', color: '#ff7f0e' }
+  ];
+
+  function cumulative(arr) {
+    const out = [];
+    let tot = 0;
+    for (const v of arr) {
+      if (v == null) { out.push(null); continue; }
+      tot += Number(v);
+      out.push(tot);
+    }
+    return out;
+  }
+
+  const datasets = players.map(p => ({
+    label: p.label,
+    data: cumulative(hist[p.key] || []),
+    borderColor: p.color,
+    borderWidth: 1.5,
+    fill: false,
+    pointRadius: 0,
+    tension: 0.1
+  }));
+
+  datasets.push({
+    label: `Cal Raleigh ${year}`,
+    data: calTotals,
+    borderColor: '#d9534f',
+    backgroundColor: 'rgba(217,83,79,0.2)',
+    fill: false,
+    lineTension: 0.1
+  });
+
+  const maxLen = Math.max(calTotals.length, ...datasets.map(d => d.data.length));
+  const labels = Array.from({ length: maxLen }, (_, i) => i + 1);
+
   const ctx = document.getElementById('hrChart').getContext('2d');
   new Chart(ctx, {
     type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Cumulative HR',
-        data: totals,
-        borderColor: '#d9534f',
-        backgroundColor: 'rgba(217,83,79,0.2)',
-        fill: false,
-        lineTension: 0.1
-      }]
-    },
+    data: { labels, datasets },
     options: {
       responsive: true,
       scales: {
         x: { display: true, title: { display: true, text: 'Game' } },
         y: { display: true, title: { display: true, text: 'Home Runs' }, beginAtZero: true }
+      },
+      plugins: {
+        legend: { position: 'bottom' }
       }
     }
   });

@@ -3,46 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>choggers.com</title>
+  <title>Cal Raleigh Season Tracker</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap">
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      min-height: 100vh;
+      font-family: 'Open Sans', sans-serif;
+      background: #f6f8fa;
+      color: #24292f;
       display: flex;
       flex-direction: column;
-      background: #f7f7f7;
-      color: #333;
+      min-height: 100vh;
     }
     header, footer {
-      background: #003366;
+      background: #24292f;
       color: #fff;
       text-align: center;
-      padding: 1rem;
+      padding: 1rem 0;
     }
     main {
       flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      max-width: 960px;
+      margin: 0 auto;
       padding: 2rem;
-      text-align: center;
+    }
+    h1 {
+      margin: 0 0 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+    th, td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #ddd;
+      text-align: right;
+    }
+    th {
+      text-align: left;
+      background: #eaecef;
+    }
+    canvas {
+      max-width: 100%;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>choggers.com</h1>
+    <h1>Cal Raleigh Season Tracker</h1>
   </header>
   <main>
-    <p>Welcome to the new choggers.com.</p>
-    <p>This site is being rebuilt from scratch. Check back soon!</p>
-    <p><a href="cal.html">Cal Raleigh Season Tracker</a></p>
+    <section id="stats">
+      <table>
+        <thead>
+          <tr>
+            <th>Stat</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Games</td><td id="games">--</td></tr>
+          <tr><td>At Bats</td><td id="atbats">--</td></tr>
+          <tr><td>Hits</td><td id="hits">--</td></tr>
+          <tr><td>Home Runs</td><td id="hr">--</td></tr>
+          <tr><td>RBI</td><td id="rbi">--</td></tr>
+          <tr><td>AVG</td><td id="avg">--</td></tr>
+          <tr><td>OBP</td><td id="obp">--</td></tr>
+          <tr><td>SLG</td><td id="slg">--</td></tr>
+          <tr><td>OPS</td><td id="ops">--</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section>
+      <canvas id="hrChart" height="200"></canvas>
+    </section>
   </main>
   <footer>
     &copy; 2025 choggers.com
   </footer>
+  <script src="js/chart.min.js"></script>
+  <script src="js/cal-tracker.js"></script>
 </body>
 </html>
