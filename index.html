@@ -2,173 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cal Raleigh Appreciation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>choggers.com</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #0c162f;
-      color: #ffffff;
       margin: 0;
       padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f7f7f7;
+      color: #333;
     }
-    header {
-      background: #00193d;
-      padding: 20px 0;
+    header, footer {
+      background: #003366;
+      color: #fff;
       text-align: center;
+      padding: 1rem;
     }
-    h1 {
-      margin: 0;
-      color: #ff4c00;
-    }
-    nav {
-      margin-top: 10px;
-    }
-    nav a {
-      color: #ff4c00;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-    section {
-      padding: 40px 20px;
-      max-width: 800px;
-      margin: auto;
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 2rem;
       text-align: center;
-    }
-    .stats div {
-      font-size: 1.2em;
-      margin: 8px 0;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      margin-bottom: 6px;
-    }
-    footer {
-      background: #00193d;
-      padding: 20px;
-      text-align: center;
-      color: #888;
-    }
-    a.external {
-      color: #4ba3ff;
-    }
-    canvas {
-      width: 100%;
-      height: 400px;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Cal Raleigh Appreciation</h1>
-    <nav>
-      <a href="#bio">Bio</a>
-      <a href="#stats">Stats</a>
-      <a href="#breakdown">Breakdown</a>
-      <a href="#facts">Fun Facts</a>
-    </nav>
+    <h1>choggers.com</h1>
   </header>
-
-  <section id="bio">
-    <h2>About Cal</h2>
-    <p>Cal Raleigh is the hard-hitting catcher for the Seattle Mariners, beloved by
-      fans for clutch home runs and steady defense. Born November 26, 1996 in
-      Cullowhee, North Carolina, he played college baseball at Florida State
-      before being drafted by the Mariners in 2018. Raleigh made his MLB debut
-      in 2021 and quickly earned the nickname <em>"Big Dumper"</em> from Mariners
-      broadcaster Mike Blowers.</p>
-  </section>
-
-  <section id="stats">
-    <h2>2024 Season Tracker</h2>
-    <div id="stats-container" class="stats">
-      <div>Loading...</div>
-    </div>
-  </section>
-
-  <section id="breakdown">
-    <h2>2024 Breakdown</h2>
-    <h3>Home Runs by Opponent</h3>
-    <canvas id="teamsChart"></canvas>
-    <h3>Home Runs by Batting Side</h3>
-    <canvas id="sideChart"></canvas>
-    <h3>Home vs Away</h3>
-    <canvas id="homeAwayChart"></canvas>
-  </section>
-
-  <section id="facts">
-    <h2>Fun Facts</h2>
-    <ul>
-      <li>Switch-hitting catcher with tremendous power from the left side.</li>
-      <li>Hit a walk-off homer in 2022 that clinched Seattle's first postseason
-          berth in over two decades.</li>
-      <li>Loves fishing in the offseason.</li>
-    </ul>
-    <p>More info at
-      <a class="external" href="https://www.mlb.com/player/cal-raleigh-663728"
-         target="_blank" rel="noopener">MLB.com</a>.</p>
-  </section>
-
+  <main>
+    <p>Welcome to the new choggers.com.</p>
+    <p>This site is being rebuilt from scratch. Check back soon!</p>
+  </main>
   <footer>
-    Made with ❤ by Mariners fans.
+    &copy; 2025 choggers.com
   </footer>
-
-  <script src="js/chart.min.js"></script>
-  <script>
-    async function loadStats() {
-      try {
-        const res = await fetch('https://statsapi.mlb.com/api/v1/people/663728/stats?stats=season&group=hitting');
-        const data = await res.json();
-        const stat = data.stats[0].splits[0].stat;
-        const games = parseInt(stat.gamesPlayed, 10);
-        const homers = parseInt(stat.homeRuns, 10);
-        const avg = parseFloat(stat.avg).toFixed(3);
-        const pace = ((homers / games) * 162).toFixed(1);
-        document.getElementById('stats-container').innerHTML = `
-          <div>Games Played: <strong>${games}</strong></div>
-          <div>Home Runs: <strong>${homers}</strong></div>
-          <div>Batting Avg: <strong>${avg}</strong></div>
-          <div>Projected HRs (162g pace): <strong>${pace}</strong></div>
-        `;
-      } catch (err) {
-        document.getElementById('stats-container').innerText = 'Stats unavailable.';
-      }
-    }
-    async function loadCalStats() {
-      const res = await fetch("js/cal_stats.json");
-      return res.json();
-    }
-
-    function chartTeams(ctx, stats) {
-      const labels = Object.keys(stats.byTeam);
-      const data = labels.map(t => stats.byTeam[t].hr);
-      new Chart(ctx, { type: "bar", data: { labels, datasets: [{ label: "HRs", data, backgroundColor: "#4bc0c0" }] }, options: { responsive: true, maintainAspectRatio: false } });
-    }
-
-    function chartSide(ctx, stats) {
-      const labels = ["Lefty", "Righty"];
-      const data = [stats.vsSide.L.hr, stats.vsSide.R.hr];
-      new Chart(ctx, { type: "pie", data: { labels, datasets: [{ data, backgroundColor: ["#ff6384", "#36a2eb"] }] }, options: { responsive: true, maintainAspectRatio: false } });
-    }
-
-    function chartHomeAway(ctx, stats) {
-      const labels = ["Home", "Away"];
-      const data = [stats.homeAway.home.hr, stats.homeAway.away.hr];
-      new Chart(ctx, { type: "pie", data: { labels, datasets: [{ data, backgroundColor: ["#ffcd56", "#9966ff"] }] }, options: { responsive: true, maintainAspectRatio: false } });
-    }
-
-    async function drawBreakdown() {
-      const stats = await loadCalStats();
-      chartTeams(document.getElementById("teamsChart").getContext("2d"), stats);
-      chartSide(document.getElementById("sideChart").getContext("2d"), stats);
-      chartHomeAway(document.getElementById("homeAwayChart").getContext("2d"), stats);
-    }
-
-    loadStats();
-    drawBreakdown();
-  </script>
 </body>
 </html>

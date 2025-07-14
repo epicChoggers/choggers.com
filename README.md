@@ -1,6 +1,7 @@
 # choggers.com
-dumpy time
 
-## Updating stats
+This repository hosts the new version of **choggers.com**.
 
-Run `./fetch_logs.sh` to refresh the data files. This script downloads game logs from MLB's Stats API and outputs `js/cal_stats.json` used by the website's graphs.
+The site is currently being rebuilt from scratch and only contains a simple
+placeholder page. No historical data or scripts from the previous version are
+used.
