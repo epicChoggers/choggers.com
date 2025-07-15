@@ -57,10 +57,11 @@ async function loadHrChart() {
     label: p.label,
     data: cumulative(hist[p.key] || []),
     borderColor: p.color,
-    borderWidth: 1.5,
+    borderWidth: 2,
     fill: false,
     pointRadius: 0,
-    tension: 0.1
+    tension: 0.3,
+    cubicInterpolationMode: 'monotone'
   }));
 
   datasets.push({
@@ -69,7 +70,8 @@ async function loadHrChart() {
     borderColor: '#d9534f',
     backgroundColor: 'rgba(217,83,79,0.2)',
     fill: false,
-    lineTension: 0.1
+    tension: 0.3,
+    cubicInterpolationMode: 'monotone'
   });
 
   const maxLen = Math.max(calTotals.length, ...datasets.map(d => d.data.length));
@@ -81,9 +83,19 @@ async function loadHrChart() {
     data: { labels, datasets },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       scales: {
-        x: { display: true, title: { display: true, text: 'Game' } },
-        y: { display: true, title: { display: true, text: 'Home Runs' }, beginAtZero: true }
+        x: {
+          display: true,
+          title: { display: true, text: 'Game' },
+          grid: { color: 'rgba(0,0,0,0.1)' }
+        },
+        y: {
+          display: true,
+          title: { display: true, text: 'Home Runs' },
+          beginAtZero: true,
+          grid: { color: 'rgba(0,0,0,0.1)' }
+        }
       },
       plugins: {
         legend: { position: 'bottom' }
