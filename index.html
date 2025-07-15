@@ -4,20 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cal Raleigh Season Tracker</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#24292f">
   <style>
+    :root {
+      --bg-color: #f6f8fa;
+      --text-color: #24292f;
+      --header-bg: #24292f;
+      --header-text: #fff;
+      --table-header-bg: #eaecef;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #0d1117;
+        --text-color: #c9d1d9;
+        --header-bg: #161b22;
+        --header-text: #c9d1d9;
+        --table-header-bg: #21262d;
+      }
+    }
+
     body {
       margin: 0;
-      font-family: 'Open Sans', sans-serif;
-      background: #f6f8fa;
-      color: #24292f;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      color-scheme: light dark;
     }
+
     header, footer {
-      background: #24292f;
-      color: #fff;
+      background: var(--header-bg);
+      color: var(--header-text);
       text-align: center;
       padding: 1rem 0;
     }
@@ -28,10 +52,15 @@
       padding: 2rem;
     }
     h1 {
-      margin: 0 0 1rem;
+      margin: 1rem 0;
+      font-weight: 700;
+      text-align: center;
     }
     table {
       width: 100%;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
       border-collapse: collapse;
       margin-bottom: 2rem;
     }
@@ -42,11 +71,26 @@
     }
     th {
       text-align: left;
-      background: #eaecef;
+      background: var(--table-header-bg);
     }
-    canvas {
-      max-width: 100%;
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      height: 0;
+      padding-bottom: 60%;
     }
+
+    .chart-container canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    footer { font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -76,7 +120,9 @@
       </table>
     </section>
     <section>
-      <canvas id="hrChart" height="200"></canvas>
+      <div class="chart-container">
+        <canvas id="hrChart"></canvas>
+      </div>
     </section>
   </main>
   <footer>
@@ -84,5 +130,12 @@
   </footer>
   <script src="js/chart.min.js"></script>
   <script src="js/cal-tracker.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js');
+      });
+    }
+  </script>
 </body>
 </html>

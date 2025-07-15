@@ -1,0 +1,8 @@
+{
+  "name": "Cal Raleigh Season Tracker",
+  "short_name": "CalRaleigh",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fa",
+  "theme_color": "#24292f"
+}
