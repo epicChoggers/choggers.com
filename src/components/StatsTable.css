@@ -1,0 +1,137 @@
+.stats-table-section {
+  margin-bottom: 20px;
+}
+
+.stats-table-section h2 {
+  color: var(--highlight);
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--mariners-silver);
+  font-family: 'Roboto Mono', monospace;
+  background: var(--dark-bg);
+  min-width: 800px;
+}
+
+th, td {
+  padding: 12px 8px;
+  text-align: center;
+  border-bottom: 1px solid #30363d;
+  color: var(--mariners-silver);
+  transition: var(--transition);
+}
+
+th {
+  background-color: var(--table-header-bg);
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+td {
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: var(--table-row-alt);
+}
+
+tr:hover {
+  background-color: var(--table-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 255, 0, 0.1);
+}
+
+.highlighted-row {
+  background-color: rgba(0, 255, 0, 0.1) !important;
+  border-left: 4px solid var(--mariners-green);
+}
+
+.highlighted-row:hover {
+  background-color: rgba(0, 255, 0, 0.15) !important;
+}
+
+.player-name {
+  text-align: left !important;
+  font-weight: bold;
+  color: var(--mariners-silver) !important;
+}
+
+.salary, .dollar-per-hr {
+  color: var(--highlight) !important;
+  font-weight: bold;
+}
+
+.external-link {
+  color: var(--highlight) !important;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.external-link:hover {
+  background-color: rgba(0, 255, 0, 0.1);
+  transform: scale(1.1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .stats-table-section h2 {
+    font-size: 20px;
+  }
+  
+  table {
+    min-width: 600px;
+  }
+  
+  th, td {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  
+  .player-name {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-table-section h2 {
+    font-size: 18px;
+  }
+  
+  table {
+    min-width: 500px;
+  }
+  
+  th, td {
+    padding: 6px 2px;
+    font-size: 10px;
+  }
+  
+  .player-name {
+    font-size: 10px;
+  }
+  
+  .external-link {
+    padding: 2px;
+  }
+} 

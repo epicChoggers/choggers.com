@@ -1,0 +1,57 @@
+:root {
+  --mariners-green: #00FF00;
+  --mariners-navy: #0A0A14;
+  --mariners-silver: #c4ced4;
+  --highlight: #00FF00;
+  --dark-bg: #0A0A14;
+  --table-header-bg: #1A2B3C;
+  --table-row-alt: #161b22;
+  --table-hover: #1e2a38;
+  --border-radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--mariners-silver);
+  font-family: 'Roboto Mono', monospace;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mariners-green);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00cc00;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  :root {
+    --border-radius: 8px;
+  }
+} 
