@@ -1,141 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cal Raleigh Season Tracker</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#24292f">
+  <meta charset="UTF-8" />
+  <title>Cal Raleigh HR Pace Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    :root {
-      --bg-color: #f6f8fa;
-      --text-color: #24292f;
-      --header-bg: #24292f;
-      --header-text: #fff;
-      --table-header-bg: #eaecef;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-color: #0d1117;
-        --text-color: #c9d1d9;
-        --header-bg: #161b22;
-        --header-text: #c9d1d9;
-        --table-header-bg: #21262d;
-      }
-    }
-
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      color-scheme: light dark;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: 'Roboto Mono', monospace;
     }
-
-    header, footer {
-      background: var(--header-bg);
-      color: var(--header-text);
+    header {
+      background-color: #161b22;
+      padding: 20px;
       text-align: center;
-      padding: 1rem 0;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid #30363d;
     }
-    main {
-      flex: 1;
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 2rem;
+    .content {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
     }
-    h1 {
-      margin: 1rem 0;
-      font-weight: 700;
-      text-align: center;
+    .stat-block {
+      background-color: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
     }
-    table {
-      width: 100%;
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
-      border-collapse: collapse;
-      margin-bottom: 2rem;
-    }
-    th, td {
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #ddd;
-      text-align: right;
-    }
-    th {
-      text-align: left;
-      background: var(--table-header-bg);
-    }
-    .chart-container {
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-      height: 0;
-      padding-bottom: 60%;
-    }
-
-    .chart-container canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
+    canvas {
       width: 100% !important;
-      height: 100% !important;
+      max-height: 500px;
     }
-
-    footer { font-size: 0.8rem; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Cal Raleigh Season Tracker</h1>
-  </header>
-  <main>
-    <section id="stats">
-      <table>
-        <thead>
-          <tr>
-            <th>Stat</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Games</td><td id="games">--</td></tr>
-          <tr><td>At Bats</td><td id="atbats">--</td></tr>
-          <tr><td>Hits</td><td id="hits">--</td></tr>
-          <tr><td>Home Runs</td><td id="hr">--</td></tr>
-          <tr><td>RBI</td><td id="rbi">--</td></tr>
-          <tr><td>AVG</td><td id="avg">--</td></tr>
-          <tr><td>OBP</td><td id="obp">--</td></tr>
-          <tr><td>SLG</td><td id="slg">--</td></tr>
-          <tr><td>OPS</td><td id="ops">--</td></tr>
-        </tbody>
-      </table>
-    </section>
-    <section>
-      <div class="chart-container">
-        <canvas id="hrChart"></canvas>
-      </div>
-    </section>
-  </main>
-  <footer>
-    &copy; 2025 choggers.com
-  </footer>
-  <script src="js/chart.min.js"></script>
-  <script src="js/cal-tracker.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js');
+  <header>Cal Raleigh HR Game Log Comparison</header>
+  <div class="content">
+    <div class="stat-block">
+      <h2>Home Run Progression by Game</h2>
+      <canvas id="lineChart"></canvas>
+    </div>
+  </div>
+
+<script>
+  const players = [
+    { label: "Barry Bonds 2001", id: 111188, season: 2001 },
+    { label: "Aaron Judge 2022", id: 592450, season: 2022 },
+    { label: "Aaron Judge 2024", id: 592450, season: 2024 },
+    { label: "Cal Raleigh 2025", id: 663728, season: 2025 }
+  ];
+
+  async function fetchHRData() {
+    const results = {};
+    const summary = [];
+
+    for (const { label, id, season } of players) {
+      const url = `https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=gameLog&season=${season}&group=hitting`;
+      const res = await fetch(url);
+      const json = await res.json();
+      const games = json?.stats?.[0]?.splits || [];
+
+      let totalHR = 0;
+      const progression = [];
+
+      for (const game of games.reverse()) {
+        totalHR += Number(game.stat.homeRuns || 0);
+        progression.push(totalHR);
+      }
+
+      results[label] = progression;
+      summary.push({ label, season, totalHR, gamesPlayed: progression.length });
+    }
+
+    return { results, summary };
+  }
+
+  function renderStats(summary) {
+    const block = document.createElement('div');
+    block.style.padding = '1em';
+    block.style.fontSize = '0.9em';
+
+    summary.sort((a, b) => b.totalHR - a.totalHR);
+
+block.innerHTML = `<h3>HR Summary</h3>` + summary.map(s => {
+  const pace = (s.totalHR / s.gamesPlayed * 162).toFixed(1);
+  const isCal = s.label === "Cal Raleigh 2025";
+  return `<div style="margin-bottom: 0.5em; font-weight:${isCal ? 'bold' : 'normal'};">
+    ${isCal ? '🟢' : ''} <strong>${s.label}</strong> (${s.season}) – 
+    ${s.totalHR} HR in ${s.gamesPlayed} G (
+    <span style="color:gray;">${pace} pace</span>)
+  </div>`;
+}).join('');
+
+
+    document.querySelector('.content').appendChild(block);
+  }
+
+  async function fetchSeasonStats() {
+    const data = [];
+    for (const { label, id, season } of players) {
+      const url = `https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=season&group=hitting&season=${season}`;
+      const res = await fetch(url);
+      const json = await res.json();
+      const stat = json?.stats?.[0]?.splits?.[0]?.stat;
+
+      data.push({
+        label,
+        AVG: parseFloat(stat.avg),
+        OBP: parseFloat(stat.obp),
+        SLG: parseFloat(stat.slg),
+        OPS: parseFloat(stat.ops),
+        AB_HR: (parseInt(stat.atBats) / Math.max(1, parseInt(stat.homeRuns))).toFixed(3) // AB/HR
       });
     }
-  </script>
+    return data;
+  }
+
+  async function plotTableStats() {
+    const stats = await fetchSeasonStats();
+    const labels = ['AVG', 'OBP', 'SLG', 'OPS', 'AB/HR'];
+
+    // Find leader for each stat (max value)
+    const leaders = {};
+    labels.forEach(label => {
+      let max = -Infinity;
+      let idx = -1;
+      stats.forEach((p, i) => {
+        const val = parseFloat(p[label.replace('/', '_')]);
+        if (val > max) {
+          max = val;
+          idx = i;
+        }
+      });
+      leaders[label] = idx;
+    });
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'stat-block';
+    wrapper.innerHTML = `<h2>Season Rate Stats</h2>`;
+
+    let table = `<table style="width:100%;border-collapse:collapse;text-align:center;">`;
+    table += `<thead><tr><th style='color:#c9d1d9;'>Player</th>`;
+    labels.forEach(l => {
+      table += `<th style='color:#c9d1d9;'>${l}</th>`;
+    });
+    table += `</tr></thead><tbody>`;
+    stats.forEach((p, i) => {
+      table += `<tr>`;
+      table += `<td style='color:#c9d1d9;${p.label.includes('Cal Raleigh') ? 'font-weight:bold;' : ''}'>${p.label}</td>`;
+      labels.forEach((l, j) => {
+        let val = p[l.replace('/', '_')];
+        // Format as X.XXX
+        val = (isNaN(val) ? val : Number(val).toFixed(3));
+        const isLeader = leaders[l] === i;
+        table += `<td style='color:#c9d1d9;${isLeader ? 'font-weight:bold;' : ''}'>${val}</td>`;
+      });
+      table += `</tr>`;
+    });
+    table += `</tbody></table>`;
+    wrapper.innerHTML += table;
+    document.querySelector('.content').appendChild(wrapper);
+  }
+
+  async function plotChart() {
+    const { results, summary } = await fetchHRData();
+
+    const datasets = Object.entries(results).map(([label, data], index) => {
+      const isCal = label.includes('Cal Raleigh 2025');
+      return {
+        label,
+        data,
+        fill: false,
+        borderColor: isCal ? '#00e676' : ['#1f6feb', '#c62828', '#ad1457'][index % 3],
+        borderWidth: isCal ? 4 : 2,
+        borderDash: isCal ? [] : [4, 4],
+        tension: 0.25,
+        pointRadius: 0
+      };
+    });
+
+    new Chart(document.getElementById('lineChart'), {
+      type: 'line',
+      data: {
+        labels: Array.from({ length: 162 }, (_, i) => i + 1),
+        datasets
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { labels: { color: '#c9d1d9' } },
+          title: {
+            display: true,
+            text: 'Home Run Pace Comparison',
+            color: '#c9d1d9',
+            font: { size: 20 }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Game Number', color: '#c9d1d9' },
+            ticks: { color: '#c9d1d9' }
+          },
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Home Runs', color: '#c9d1d9' },
+            ticks: { color: '#c9d1d9' }
+          }
+        }
+      }
+    });
+
+    renderStats(summary);
+    await plotTableStats();
+  }
+
+  plotChart();
+</script>
+
+
 </body>
 </html>
