@@ -1,6 +1,7 @@
 import React from 'react'
 import { TrendingUp, Users } from 'lucide-react'
 import './Header.css'
+import humpyImage from '../assets/humpy.png'
 
 const Header = ({ mode, robberyCount, onModeChange }) => {
   const handleToggle = () => {
@@ -35,7 +36,14 @@ const Header = ({ mode, robberyCount, onModeChange }) => {
         
         <div className="header-right">
           <div className="countdown-display">
-            <span className="countdown-label">Times Humpy has been Robbed:</span>
+            <div className="humpy-hover-container">
+              <span className="countdown-label">Times Humpy has been Robbed:</span>
+              <img 
+                src={humpyImage} 
+                alt="Humpy" 
+                className="humpy-image"
+              />
+            </div>
             <span className="countdown-number">{robberyCount}</span>
           </div>
         </div>
