@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Apology Form Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- your existing form‐controls CSS here… -->
+
+  <style>
+    /* ==== PREVIEW STYLES TO MATCH YOUR EXAMPLES ==== */
+    #apologyFormPreview { 
+  width: 500px; 
+  background: #fff; 
+  /* ↑↑↑ increase top/bottom padding: ↑↑↑ */
+  padding: 40px 20px 60px;  
+  /* ↑↑↑ enforce a minimum tallness: ↑↑↑ */
+  min-height: 900px;       
+  font-family: Arial, sans-serif; 
+  color: #000; 
+  border-radius: 8px; 
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#apologyFormPreview .header {
+  margin-bottom: 16px;
+}
+
+#apologyFormPreview hr {
+  border: none;
+  border-top: 1px solid #000;
+  /* ↑↑↑ more breathing room around the rule: ↑↑↑ */
+  margin: 24px 0;
+}
+
+    #apologyFormPreview .header img {
+      width: 80px; height: 80px; 
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    #apologyFormPreview .header h2 {
+      margin: 0; 
+      font-size: 24px; 
+      line-height: 1;
+    }
+    #apologyFormPreview .header h2 .name {
+      font-weight: bold;
+    }
+    #apologyFormPreview .meta {
+      display: flex; 
+      justify-content: space-between; 
+      margin-top: 16px; 
+      font-size: 14px;
+    }
+    #apologyFormPreview .meta .to {
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    #apologyFormPreview .reasons-section {
+      margin-top: 16px;
+    }
+    #apologyFormPreview .reasons-section .title {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    #apologyFormPreview .reasons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 16px;
+    }
+    #apologyFormPreview .reasons-grid label {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 14px;
+    }
+    #apologyFormPreview hr {
+      border: none;
+      border-top: 1px solid #000;
+      margin: 16px 0;
+    }
+    #apologyFormPreview .final {
+      font-size: 14px;
+    }
+    #apologyFormPreview .final label {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    /* end preview styles */
+  </style>
+</head>
+<body>
+  <div class="apology-generator-container">
+    <h1>Apology Form Generator</h1>
+    <form id="apologyFormInput">
+      <!-- your existing inputs… -->
+      <label>
+        Player Name:
+        <input type="text" id="playerName" required placeholder="e.g. Francisco Lindor">
+      </label>
+      <label>
+        Team (optional):
+        <input type="text" id="playerTeam" placeholder="e.g. New York Mets">
+      </label>
+      <label>
+        Upload Player Image (optional):
+        <input type="file" id="playerImage" accept="image/*">
+      </label>
+      <div class="reasons-list" id="reasonsList"></div>
+      <div class="add-reason-row">
+        <input type="text" id="customReason" placeholder="Add custom reason…">
+        <button type="button" id="addReasonBtn">Add</button>
+      </div>
+      <label>
+        <input type="checkbox" id="finalStatement">
+        I will hereby respect <span id="playerNamePreview">[Player Name]</span> and I will NOT talk down on the future first-ballot Hall of Famer.
+      </label>
+      <br><br>
+      <button type="button" id="downloadBtn">Download Apology Form as Image</button>
+    </form>
+
+    <!-- <<< UPDATED PREVIEW DIV >>> -->
+    <div id="apologyFormPreview"></div>
+  </div>
+
+  <script src="js/apology-generator.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</body>
+</html>

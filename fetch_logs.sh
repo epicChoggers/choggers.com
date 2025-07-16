@@ -3,7 +3,6 @@ set -e
 players=(
   "bonds01 111188 2001"
   "judge22 592450 2022"
-  "judge24 592450 2024"
   "cal24 663728 2024"
 )
 mkdir -p tmp
