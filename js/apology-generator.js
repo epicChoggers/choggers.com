@@ -48,26 +48,31 @@ const defaultReasons = [
     });
   }
   
+  function parseBold(text) {
+    // Replace **word** with <strong>word</strong>
+    return text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  }
+  
   function updatePreview() {
     const name = playerNameInput.value.trim() || '[Player Name]';
     const date = new Date().toLocaleDateString();
     playerNamePreviewSpan.textContent = name;
-  
+
     // build the header image HTML
     const imgHtml = uploadedImageDataUrl
       ? `<img src="${uploadedImageDataUrl}" alt="${name}">`
       : `<div style="width:80px;height:80px;border-radius:50%;background:#eee;"></div>`;
-  
+
     // which reasons are checked?
     const checked = new Set(selectedReasons);
-  
+
     // generate the preview markup
     previewDiv.innerHTML = `
       <div class="header">
         ${imgHtml}
         <h2><span class="name">${name}</span> Apology Form</h2>
       </div>
-  
+
       <div class="meta">
         <div class="to">To: ${name.toUpperCase()}</div>
         <div class="from-date">
@@ -75,26 +80,29 @@ const defaultReasons = [
           <span>Date:</span> ${date}
         </div>
       </div>
-  
+
       <div class="reasons-section">
         <div class="title">Reason for behavior:</div>
         <div class="reasons-grid">
           ${reasons.map(r => `
             <label>
               <input type="checkbox" disabled ${checked.has(r) ? 'checked' : ''}>
-              ${r.replace('[Player Name]', name)}
+              ${parseBold(r.replace('[Player Name]', name))}
             </label>
           `).join('')}
         </div>
       </div>
-  
+
       <hr>
-  
+
       <div class="final">
         <label>
           <input type="checkbox" disabled ${finalStatementCheckbox.checked ? 'checked' : ''}>
-          I will hereby respect <strong>${name}</strong> and I will NOT talk down on the future first-ballot Hall of Famer.
+          ${parseBold(`I will hereby respect <strong>${name}</strong> and I will NOT talk down on the future first-ballot Hall of Famer.`)}
         </label>
+      </div>
+      <div class="disclaimer">
+        <em>Your apology needs to be as loud as your disrespect was</em>
       </div>
     `;
   }

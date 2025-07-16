@@ -2,7 +2,7 @@
 import { spotracLinks } from './data.js';
 
 export function renderStatsTable(selector, stats) {
-  const topOrder = ['Cal Raleigh 2025','Aaron Judge 2025','Shohei Ohtani 2025'];
+  const topOrder = ['Cal Raleigh 2025','Shohei Ohtani 2025'];
   const ordered  = [
     ...topOrder.map(l=>stats.find(s=>s.label===l)).filter(Boolean),
     ...stats.filter(s=>!topOrder.includes(s.label))
@@ -16,7 +16,7 @@ export function renderStatsTable(selector, stats) {
 
   let html = '<table><caption>Season Rate Stats</caption><thead><tr><th scope="col">Player</th>';
   cols.forEach(c => {
-    let text = c.replace('_','/').replace('DollarPerHR','$/HR');
+    let text = c.replace('_','/').replace('DollarPerHR','Dollar Per Dump');
     html += `<th scope="col">${text}</th>`;
   });
   html += '</tr></thead><tbody>';

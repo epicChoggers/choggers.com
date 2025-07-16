@@ -9,85 +9,116 @@
 
   <style>
     /* ==== PREVIEW STYLES TO MATCH YOUR EXAMPLES ==== */
-    #apologyFormPreview { 
-  width: 500px; 
-  background: #fff; 
-  /* ↑↑↑ increase top/bottom padding: ↑↑↑ */
-  padding: 40px 20px 60px;  
-  /* ↑↑↑ enforce a minimum tallness: ↑↑↑ */
-  min-height: 900px;       
-  font-family: Arial, sans-serif; 
-  color: #000; 
-  border-radius: 8px; 
+    #apologyFormPreview {
+  width: 600px;
+  background: #fff;
+  padding: 48px 32px 72px;
+  min-height: 900px;
+  font-family: Arial, sans-serif;
+  color: #000;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-
 #apologyFormPreview .header {
-  margin-bottom: 16px;
+  margin-bottom: 32px;
 }
-
+#apologyFormPreview .header h2 {
+  font-family: Impact, Arial Black, Arial, sans-serif;
+  font-size: 38px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+  line-height: 1.1;
+}
+#apologyFormPreview .header .name {
+  font-family: Impact, Arial Black, Arial, sans-serif;
+  font-size: 42px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+#apologyFormPreview .header img {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+#apologyFormPreview .meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+  font-size: 16px;
+  font-weight: bold;
+}
+#apologyFormPreview .meta .to {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+#apologyFormPreview .reasons-section {
+  margin-top: 36px;
+}
+#apologyFormPreview .reasons-section .title {
+  font-weight: bold;
+  margin-bottom: 18px;
+  font-size: 22px;
+}
+#apologyFormPreview .reasons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 36px;
+}
+#apologyFormPreview .reasons-grid label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: normal;
+  min-height: 36px;
+  line-height: 1.2;
+}
+#apologyFormPreview .reasons-grid input[type="checkbox"] {
+  width: 28px;
+  height: 28px;
+  accent-color: #222;
+  margin-top: 0;
+  flex-shrink: 0;
+}
 #apologyFormPreview hr {
   border: none;
-  border-top: 1px solid #000;
-  /* ↑↑↑ more breathing room around the rule: ↑↑↑ */
-  margin: 24px 0;
+  border-top: 2px solid #000;
+  margin: 36px 0 28px 0;
 }
-
-    #apologyFormPreview .header img {
-      width: 80px; height: 80px; 
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    #apologyFormPreview .header h2 {
-      margin: 0; 
-      font-size: 24px; 
-      line-height: 1;
-    }
-    #apologyFormPreview .header h2 .name {
-      font-weight: bold;
-    }
-    #apologyFormPreview .meta {
-      display: flex; 
-      justify-content: space-between; 
-      margin-top: 16px; 
-      font-size: 14px;
-    }
-    #apologyFormPreview .meta .to {
-      text-transform: uppercase;
-      font-weight: bold;
-    }
-    #apologyFormPreview .reasons-section {
-      margin-top: 16px;
-    }
-    #apologyFormPreview .reasons-section .title {
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    #apologyFormPreview .reasons-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px 16px;
-    }
-    #apologyFormPreview .reasons-grid label {
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      font-size: 14px;
-    }
-    #apologyFormPreview hr {
-      border: none;
-      border-top: 1px solid #000;
-      margin: 16px 0;
-    }
-    #apologyFormPreview .final {
-      font-size: 14px;
-    }
-    #apologyFormPreview .final label {
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-    }
-    /* end preview styles */
+#apologyFormPreview .final {
+  font-size: 13px;
+  margin-top: 24px;
+}
+#apologyFormPreview .final label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: normal;
+}
+#apologyFormPreview .final input[type="checkbox"] {
+  width: 28px;
+  height: 28px;
+  accent-color: #222;
+  margin-top: 0;
+  flex-shrink: 0;
+}
+#apologyFormPreview .disclaimer {
+  margin-top: 38px;
+  text-align: center;
+  font-style: italic;
+  font-size: 17px;
+  color: #222;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#apologyFormPreview,
+#apologyFormPreview .reasons-grid label,
+#apologyFormPreview .final,
+#apologyFormPreview .meta,
+#apologyFormPreview .reasons-section .title {
+  font-family: Arial, Helvetica, sans-serif;
+}
   </style>
 </head>
 <body>

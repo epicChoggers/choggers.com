@@ -1,21 +1,9 @@
-const cacheName = 'cr-tracker-v1';
-const filesToCache = [
-  './',
-  './index.html',
-  './js/chart.min.js',
-  './js/cal-tracker.js',
-  './js/hr_data.json',
-  './manifest.webmanifest'
-];
+// Service worker intentionally left blank to disable caching and unregister any previous service worker.
 
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(cacheName).then(cache => cache.addAll(filesToCache))
-  );
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
-  );
+self.addEventListener('activate', event => {
+  event.waitUntil(self.registration.unregister());
 });
