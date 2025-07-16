@@ -7,7 +7,7 @@ This project is configured to deploy to GitHub Pages using the `gh-pages` packag
 ### Prerequisites
 
 1. Ensure you have a GitHub repository set up
-2. Make sure the repository name matches the `base` path in `vite.config.js` (currently `/choggers.com/`)
+2. Make sure the repository name matches the `base` path in `vite.config.js` (set to `/` when using a custom domain)
 
 ### Deployment Steps
 
@@ -46,5 +46,5 @@ This project is configured to deploy to GitHub Pages using the `gh-pages` packag
 If you have a custom domain:
 
 1. Add a `CNAME` file to the `public` directory with your domain
-2. Update the `base` path in `vite.config.js` to `/` instead of `/choggers.com/`
+2. Ensure the `base` path in `vite.config.js` is set to `/`
 3. Configure your domain in GitHub Pages settings 
