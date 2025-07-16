@@ -1,8 +1,8 @@
 {
-  "name": "Cal Raleigh Season Tracker",
-  "short_name": "CalRaleigh",
+  "name": "Dumpy Tracker",
+  "short_name": "Dumpy",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f6f8fa",
-  "theme_color": "#24292f"
+  "background_color": "#0d1117",
+  "theme_color": "#0c2c56"
 }
