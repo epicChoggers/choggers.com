@@ -2,65 +2,173 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cal Raleigh HR Pace Tracker</title>
+  <title>Dumpy Tracker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&amp;display=swap" rel="stylesheet">
+  <script src="js/chart.min.js"></script>
   <style>
+    :root {
+      --mariners-green: #00685e;
+      --mariners-navy: #0c2c56;
+      --mariners-silver: #c4ced4;
+      --highlight: #00ff99;
+    }
+
     body {
       margin: 0;
       background-color: #0d1117;
       color: #c9d1d9;
       font-family: 'Roboto Mono', monospace;
     }
+
     header {
-      background-color: #161b22;
+      background-color: var(--mariners-navy);
       padding: 20px;
       text-align: center;
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
-      border-bottom: 1px solid #30363d;
+      border-bottom: 2px solid var(--mariners-green);
+      color: var(--mariners-silver);
+      letter-spacing: 1px;
     }
+
     .content {
       padding: 20px;
       max-width: 1000px;
       margin: auto;
     }
+
     .stat-block {
-      background-color: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 10px;
+      background: linear-gradient(145deg, #10141c, #0b0f17);
+      border: 2px solid var(--mariners-green);
+      border-radius: 12px;
       padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 12px rgba(0, 255, 153, 0.1);
+    }
+
+    h2 {
+      color: var(--highlight);
+      text-align: center;
+      font-size: 22px;
       margin-bottom: 20px;
     }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th, td {
+      padding: 8px;
+      border-bottom: 1px solid #30363d;
+    }
+
+    th {
+      background-color: var(--mariners-navy);
+      color: var(--mariners-silver);
+    }
+
+    tr:nth-child(even) {
+      background-color: #161b22;
+    }
+
+    tr:hover {
+      background-color: #1e2a38;
+    }
+
     canvas {
       width: 100% !important;
       max-height: 500px;
     }
+
+    a {
+      color: #58a6ff;
+      text-decoration: underline;
+    }
+    @media (max-width: 700px) {
+      .content {
+        padding: 8px;
+        max-width: 100vw;
+      }
+      .stat-block {
+        padding: 10px;
+        margin-bottom: 18px;
+        border-radius: 8px;
+      }
+      h2 {
+        font-size: 1.1em;
+      }
+      table {
+        font-size: 0.95em;
+        min-width: 600px;
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      th, td {
+        padding: 6px;
+      }
+      canvas {
+        max-width: 100vw !important;
+        min-width: 0;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>Cal Raleigh HR Game Log Comparison</header>
+  <header>Dumpy Tracker</header>
   <div class="content">
-    <div class="stat-block">
-      <h2>Home Run Progression by Game</h2>
-      <canvas id="lineChart"></canvas>
+    <div id="main-blocks">
+      <div class="stat-block">
+        <canvas id="lineChart"></canvas>
+      </div>
     </div>
   </div>
 
 <script>
   const players = [
-    { label: "Barry Bonds 2001", id: 111188, season: 2001 },
-    { label: "Aaron Judge 2022", id: 592450, season: 2022 },
-    { label: "Aaron Judge 2024", id: 592450, season: 2024 },
-    { label: "Cal Raleigh 2025", id: 663728, season: 2025 }
+    { label: "Cal Raleigh 2025", id: 663728, season: 2025, teamId: 136 }, // Mariners
+    { label: "Barry Bonds 2001", id: 111188, season: 2001, teamId: 137 }, // Giants
+    { label: "Sammy Sosa 1998", id: 122544, season: 1998, teamId: 112 }, // Cubs
+    { label: "Mark McGwire 1998", id: 118743, season: 1998, teamId: 138 }, // Cardinals
+    { label: "Aaron Judge 2022", id: 592450, season: 2022, teamId: 147 }, // Yankees
+    { label: "Aaron Judge 2024", id: 592450, season: 2024, teamId: 147 },  // Yankees
+    { label: "Aaron Judge 2025", id: 592450, season: 2025, teamId: 147 },  // Yankees
+    { label: "Shohei Ohtani 2025", id: 660271, season: 2025, teamId: 119 }, // Dodgers
+    { label: "Ken Griffey Jr. 1997", id: 115135, season: 1997, teamId: 136 }  // Mariners
   ];
+
+  // Spotrac URLs for each player (move to top-level scope)
+  const spotracLinks = {
+    'Cal Raleigh 2025': 'https://www.spotrac.com/mlb/player/_/id/26119/cal-raleigh',
+    'Barry Bonds 2001': 'https://www.spotrac.com/mlb/player/_/id/48519/barry-bonds',
+    'Sammy Sosa 1998': 'https://www.spotrac.com/mlb/player/_/id/12349/sammy-sosa',
+    'Mark McGwire 1998': 'https://www.spotrac.com/mlb/player/_/id/12047/mark-mcgwire',
+    'Aaron Judge 2022': 'https://www.spotrac.com/mlb/player/_/id/18499/aaron-judge',
+    'Aaron Judge 2024': 'https://www.spotrac.com/mlb/player/_/id/18499/aaron-judge',
+    'Aaron Judge 2025': 'https://www.spotrac.com/mlb/player/_/id/18499/aaron-judge',
+    'Shohei Ohtani 2025': 'https://www.spotrac.com/mlb/player/_/id/22386/shohei-ohtani',
+    'Ken Griffey Jr. 1997': 'https://www.spotrac.com/mlb/player/_/id/115135/ken-griffey-jr'
+  };
+
+  async function fetchTeamGamesPlayed(teamId, season) {
+    const url = `https://statsapi.mlb.com/api/v1/schedule?teamId=${teamId}&season=${season}&sportId=1&gameTypes=R`;
+    const res = await fetch(url);
+    const json = await res.json();
+    const games = (json.dates || []).flatMap(date => date.games || []);
+    // Only count games with status "Final" or "In Progress"
+    const played = games.filter(g => ["Final", "In Progress"].includes(g.status.detailedState));
+    return played.length;
+  }
 
   async function fetchHRData() {
     const results = {};
     const summary = [];
 
-    for (const { label, id, season } of players) {
+    for (const { label, id, season, teamId } of players) {
       const url = `https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=gameLog&season=${season}&group=hitting`;
       const res = await fetch(url);
       const json = await res.json();
@@ -74,57 +182,117 @@
         progression.push(totalHR);
       }
 
+      // Fetch team games played for pace calculation
+      let teamGamesPlayed = null;
+      if (teamId && season) {
+        teamGamesPlayed = await fetchTeamGamesPlayed(teamId, season);
+      }
+
       results[label] = progression;
-      summary.push({ label, season, totalHR, gamesPlayed: progression.length });
+      summary.push({ label, season, totalHR, gamesPlayed: progression.length, teamGamesPlayed });
     }
 
     return { results, summary };
   }
 
-  function renderStats(summary) {
-    const block = document.createElement('div');
-    block.style.padding = '1em';
-    block.style.fontSize = '0.9em';
-
-    summary.sort((a, b) => b.totalHR - a.totalHR);
-
-block.innerHTML = `<h3>HR Summary</h3>` + summary.map(s => {
-  const pace = (s.totalHR / s.gamesPlayed * 162).toFixed(1);
-  const isCal = s.label === "Cal Raleigh 2025";
-  return `<div style="margin-bottom: 0.5em; font-weight:${isCal ? 'bold' : 'normal'};">
-    ${isCal ? '🟢' : ''} <strong>${s.label}</strong> (${s.season}) – 
-    ${s.totalHR} HR in ${s.gamesPlayed} G (
-    <span style="color:gray;">${pace} pace</span>)
-  </div>`;
-}).join('');
-
-
-    document.querySelector('.content').appendChild(block);
-  }
-
   async function fetchSeasonStats() {
     const data = [];
+    // Real salary data for Cal Raleigh by season
+    const calSalaries = {
+      2025: 2666666,
+      2026: 12666666,
+      2027: 13666666,
+      2028: 24666666,
+      2029: 24666666,
+      2030: 24666668,
+      2031: 20000000
+    };
+    // Real salary data for Aaron Judge by season
+    const judgeSalaries = {
+      2022: 40000000,
+      2024: 40000000
+      ,2025: 40000000 // Placeholder, update if known
+    };
+    // Real salary data for Barry Bonds (inflation adjusted to 2024 dollars)
+    // 2001 salary: $11,450,000, inflation factor ~1.74 (2001 to 2024)
+    const bondsSalaries = {
+      2001: 11450000 * 1.74 // = $19,123,000
+    };
+    // Ohtani salary for 2025 (AAV: $70M, most deferred)
+    const ohtaniSalaries = {
+      2025: 70000000 // Use AAV for fair comparison
+    };
     for (const { label, id, season } of players) {
       const url = `https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=season&group=hitting&season=${season}`;
       const res = await fetch(url);
       const json = await res.json();
       const stat = json?.stats?.[0]?.splits?.[0]?.stat;
 
+      // Dollar per Homerun: salary / HR (for Cal Raleigh, Judge, Bonds; N/A for others)
+      let dollarPerHR = 'N/A';
+      let AVG = 'N/A', OBP = 'N/A', SLG = 'N/A', OPS = 'N/A', AB_HR = 'N/A';
+      if (stat) {
+        if (label === 'Cal Raleigh 2025') {
+          const salary = calSalaries[season] || 0;
+          const hr = parseInt(stat.homeRuns);
+          dollarPerHR = hr > 0 ? (salary / hr) : 'N/A';
+        } else if (label === 'Aaron Judge 2022' || label === 'Aaron Judge 2024' || label === 'Aaron Judge 2025') {
+          const salary = judgeSalaries[season] || 0;
+          const hr = parseInt(stat.homeRuns);
+          dollarPerHR = hr > 0 ? (salary / hr) : 'N/A';
+        } else if (label === 'Shohei Ohtani 2025') {
+          const salary = ohtaniSalaries[season] || 0;
+          const hr = parseInt(stat.homeRuns);
+          dollarPerHR = hr > 0 ? (salary / hr) : 'N/A';
+        } else if (label === 'Barry Bonds 2001') {
+          const salary = bondsSalaries[season] || 0;
+          const hr = parseInt(stat.homeRuns);
+          dollarPerHR = hr > 0 ? (salary / hr) : 'N/A';
+        } else if (label === 'Sammy Sosa 1998') {
+          const salary = 8750000 * 1.85; // inflation-adjusted
+          const hr = parseInt(stat.homeRuns);
+          dollarPerHR = hr > 0 ? (salary / hr) : 'N/A';
+        } else if (label === 'Mark McGwire 1998') {
+          const salary = 8900000 * 1.85; // inflation-adjusted
+          const hr = parseInt(stat.homeRuns);
+          dollarPerHR = hr > 0 ? (salary / hr) : 'N/A';
+        } else if (label === 'Ken Griffey Jr. 1997') {
+          const salary = 8500000 * 2.0; // 1997 salary, inflation-adjusted to 2024
+          const hr = parseInt(stat.homeRuns);
+          dollarPerHR = hr > 0 ? (salary / hr) : 'N/A';
+        }
+        AVG = parseFloat(stat.avg);
+        OBP = parseFloat(stat.obp);
+        SLG = parseFloat(stat.slg);
+        OPS = parseFloat(stat.ops);
+        AB_HR = (parseInt(stat.atBats) / Math.max(1, parseInt(stat.homeRuns))).toFixed(3);
+      }
       data.push({
         label,
-        AVG: parseFloat(stat.avg),
-        OBP: parseFloat(stat.obp),
-        SLG: parseFloat(stat.slg),
-        OPS: parseFloat(stat.ops),
-        AB_HR: (parseInt(stat.atBats) / Math.max(1, parseInt(stat.homeRuns))).toFixed(3) // AB/HR
+        AVG,
+        OBP,
+        SLG,
+        OPS,
+        AB_HR,
+        DUMP: dollarPerHR // Dollar per Homerun (real salary for Cal)
       });
     }
     return data;
   }
 
   async function plotTableStats() {
-    const stats = await fetchSeasonStats();
-    const labels = ['AVG', 'OBP', 'SLG', 'OPS', 'AB/HR'];
+    let stats = await fetchSeasonStats();
+    // Sort: 2025 players (Cal Raleigh, Aaron Judge, Shohei Ohtani) at the top, in that order
+    const topOrder = [
+      'Cal Raleigh 2025',
+      'Aaron Judge 2025',
+      'Shohei Ohtani 2025'
+    ];
+    stats = [
+      ...topOrder.map(label => stats.find(s => s.label === label)).filter(Boolean),
+      ...stats.filter(s => !topOrder.includes(s.label))
+    ];
+    const labels = ['AVG', 'OBP', 'SLG', 'OPS', 'AB/HR', 'Salary', 'Dollar per Dump'];
 
     // Find leader for each stat (max value)
     const leaders = {};
@@ -143,7 +311,7 @@ block.innerHTML = `<h3>HR Summary</h3>` + summary.map(s => {
 
     const wrapper = document.createElement('div');
     wrapper.className = 'stat-block';
-    wrapper.innerHTML = `<h2>Season Rate Stats</h2>`;
+    wrapper.innerHTML = `<h2 style='text-align:center;'>Season Rate Stats</h2>`;
 
     let table = `<table style="width:100%;border-collapse:collapse;text-align:center;">`;
     table += `<thead><tr><th style='color:#c9d1d9;'>Player</th>`;
@@ -153,25 +321,71 @@ block.innerHTML = `<h3>HR Summary</h3>` + summary.map(s => {
     table += `</tr></thead><tbody>`;
     stats.forEach((p, i) => {
       table += `<tr>`;
-      table += `<td style='color:#c9d1d9;${p.label.includes('Cal Raleigh') ? 'font-weight:bold;' : ''}'>${p.label}</td>`;
+      const isCal = p.label === 'Cal Raleigh 2025';
+      table += `<td style='color:#c9d1d9;${isCal ? "font-weight:bold;" : ""}'>${p.label}</td>`;
       labels.forEach((l, j) => {
-        let val = p[l.replace('/', '_')];
-        // Format as X.XXX
-        val = (isNaN(val) ? val : Number(val).toFixed(3));
-        const isLeader = leaders[l] === i;
-        table += `<td style='color:#c9d1d9;${isLeader ? 'font-weight:bold;' : ''}'>${val}</td>`;
+        let val;
+        if (l === 'Salary') {
+          // Find salary for this player/season
+          let salary = null, url = null;
+          if (p.label === 'Barry Bonds 2001') { salary = 11450000 * 1.74; url = spotracLinks['Barry Bonds 2001']; }
+          if (p.label === 'Sammy Sosa 1998') { salary = 8750000 * 1.85; url = spotracLinks['Sammy Sosa 1998']; } // 1998 salary, inflation factor ~1.85
+          if (p.label === 'Mark McGwire 1998') { salary = 8900000 * 1.85; url = spotracLinks['Mark McGwire 1998']; } // 1998 salary, inflation factor ~1.85
+          if (p.label === 'Aaron Judge 2022') { salary = 40000000; url = spotracLinks['Aaron Judge 2022']; }
+          if (p.label === 'Aaron Judge 2024') { salary = 40000000; url = spotracLinks['Aaron Judge 2024']; }
+          if (p.label === 'Aaron Judge 2025') { salary = 40000000; url = spotracLinks['Aaron Judge 2025']; }
+          if (p.label === 'Shohei Ohtani 2025') { salary = 70000000; url = spotracLinks['Shohei Ohtani 2025']; }
+          if (p.label === 'Cal Raleigh 2025') { salary = 2666666; url = spotracLinks['Cal Raleigh 2025']; }
+          if (p.label === 'Cal Raleigh 2026') { salary = 12666666; url = spotracLinks['Cal Raleigh 2025']; }
+          if (p.label === 'Cal Raleigh 2027') { salary = 13666666; url = spotracLinks['Cal Raleigh 2025']; }
+          if (p.label === 'Cal Raleigh 2028') { salary = 24666666; url = spotracLinks['Cal Raleigh 2025']; }
+          if (p.label === 'Cal Raleigh 2029') { salary = 24666666; url = spotracLinks['Cal Raleigh 2025']; }
+          if (p.label === 'Cal Raleigh 2030') { salary = 24666668; url = spotracLinks['Cal Raleigh 2025']; }
+          if (p.label === 'Cal Raleigh 2031') { salary = 20000000; url = spotracLinks['Cal Raleigh 2025']; }
+          if (p.label === 'Ken Griffey Jr. 1997') { salary = 8500000 * 2.0; url = spotracLinks['Ken Griffey Jr. 1997']; }
+          if (salary) {
+            val = `$${Number(salary).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            if (url) val = `<a href='${url}' target='_blank' style='color:#58a6ff;text-decoration:underline;'>${val}</a>`;
+          } else {
+            val = 'N/A';
+          }
+        } else if (l === 'Dollar per Dump') {
+          val = p[l.replace('/', '_') === 'Dollar per Dump' ? 'DUMP' : l.replace('/', '_')];
+          if (val !== 'N/A') {
+            const url = spotracLinks[p.label];
+            val = url ? `<a href='${url}' target='_blank' style='color:#58a6ff;text-decoration:underline;'>$${Number(val).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</a>` :
+              '$' + Number(val).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          }
+        } else {
+          val = p[l.replace('/', '_')];
+          val = (isNaN(val) ? val : Number(val).toFixed(3));
+        }
+        table += `<td style='color:#c9d1d9;${isCal ? "font-weight:bold;" : ""}'>${val}</td>`;
       });
       table += `</tr>`;
     });
     table += `</tbody></table>`;
     wrapper.innerHTML += table;
+    wrapper.innerHTML += `<div style='color:#8b949e;font-size:0.95em;margin-top:8px;'>* All salaries are inflation-adjusted to 2025 dollars.</div>`;
     document.querySelector('.content').appendChild(wrapper);
   }
 
   async function plotChart() {
     const { results, summary } = await fetchHRData();
 
-    const datasets = Object.entries(results).map(([label, data], index) => {
+    // Sort datasets so 2025 players are at the top, in the same order as the table
+    const topOrder = [
+      'Cal Raleigh 2025',
+      'Aaron Judge 2025',
+      'Shohei Ohtani 2025'
+    ];
+    const allLabels = Object.keys(results);
+    const sortedLabels = [
+      ...topOrder.filter(label => allLabels.includes(label)),
+      ...allLabels.filter(label => !topOrder.includes(label))
+    ];
+    const datasets = sortedLabels.map((label, index) => {
+      const data = results[label];
       const isCal = label.includes('Cal Raleigh 2025');
       return {
         label,
@@ -185,6 +399,38 @@ block.innerHTML = `<h3>HR Summary</h3>` + summary.map(s => {
       };
     });
 
+    // Add projected line for Cal Raleigh using team games played
+    const calKey = Object.keys(results).find(k => k.includes('Cal Raleigh 2025'));
+    const calSummary = summary.find(s => s.label.includes('Cal Raleigh 2025'));
+    if (calKey && calSummary) {
+      const calData = results[calKey];
+      const gamesPlayed = calData.length;
+      const teamGamesPlayed = calSummary.teamGamesPlayed || gamesPlayed;
+      if (gamesPlayed > 0 && teamGamesPlayed >= gamesPlayed) {
+        const totalHR = calData[gamesPlayed - 1];
+        const pace = totalHR / gamesPlayed;
+        // Maximum possible games Cal could play
+        const maxPossibleGames = 162 - (teamGamesPlayed - gamesPlayed);
+        // Projected values: null for played games, then project up to maxPossibleGames, then null after
+        const projected = Array.from({ length: 162 }, (_, i) => {
+          if (i < gamesPlayed) return null;
+          if (i < maxPossibleGames) return Number((totalHR + pace * (i + 1 - gamesPlayed)).toFixed(3));
+          return null;
+        });
+        datasets.push({
+          label: "Cal Raleigh 2025 Projected Pace",
+          data: projected,
+          fill: false,
+          borderColor: '#00e676', // same as Cal's actual line
+          borderWidth: 2,
+          borderDash: [4, 4],
+          tension: 0.25,
+          pointRadius: 0,
+          skipLegend: true
+        });
+      }
+    }
+
     new Chart(document.getElementById('lineChart'), {
       type: 'line',
       data: {
@@ -194,7 +440,15 @@ block.innerHTML = `<h3>HR Summary</h3>` + summary.map(s => {
       options: {
         responsive: true,
         plugins: {
-          legend: { labels: { color: '#c9d1d9' } },
+          legend: {
+            labels: { color: '#c9d1d9' },
+            // Filter out projected line from legend
+            filter: function(item, chart) {
+              // Hide the projected line by custom property
+              const ds = chart.data.datasets[item.datasetIndex];
+              return !ds.skipLegend;
+            }
+          },
           title: {
             display: true,
             text: 'Home Run Pace Comparison',
@@ -216,13 +470,11 @@ block.innerHTML = `<h3>HR Summary</h3>` + summary.map(s => {
       }
     });
 
-    renderStats(summary);
     await plotTableStats();
   }
 
   plotChart();
 </script>
-
 
 </body>
 </html>
