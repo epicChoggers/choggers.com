@@ -1,7 +1,7 @@
 .header {
   background-color: var(--mariners-navy);
   padding: 20px;
-  border-bottom: 2px solid var(--mariners-green);
+  border-bottom: 2px solid var(--mariners-navy);
   box-shadow: 0 2px 10px rgba(0, 255, 0, 0.1);
   position: relative;
   z-index: 10;
@@ -186,7 +186,7 @@
   background-color: #333;
   transition: var(--transition);
   border-radius: 24px;
-  border: 2px solid var(--mariners-green);
+  border: 2px solid var(--mariners-navy);
 }
 
 .slider:before {
@@ -196,13 +196,13 @@
   width: 16px;
   left: 2px;
   bottom: 2px;
-  background-color: var(--mariners-green);
+  background-color: var(--mariners-navy);
   transition: var(--transition);
   border-radius: 50%;
 }
 
 .toggle-switch input:checked + .slider {
-  background-color: var(--mariners-green);
+  background-color: var(--mariners-navy);
 }
 
 .toggle-switch input:checked + .slider:before {
@@ -375,6 +375,71 @@
 }
 
 .days-since-playoff-value {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 4px 12px;
+  min-width: 32px;
+  max-width: 120px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  justify-content: center;
+} 
+
+.header-stats-row {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 24px;
+}
+
+.toggle-container {
+  margin-right: 16px;
+}
+
+.header-left {
+  display: none;
+}
+
+.days-since-dump-block {
+  background: linear-gradient(145deg, #0ea5e9, #0369a1);
+  border: 2px solid #38bdf8;
+  border-radius: 20px;
+  padding: 8px 24px;
+  min-width: 200px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 0 8px rgba(14, 165, 233, 0.2);
+  box-sizing: border-box;
+  gap: 10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.days-since-dump-label {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+.days-since-dump-value {
   color: #fff;
   font-size: 12px;
   font-weight: 700;

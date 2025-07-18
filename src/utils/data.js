@@ -124,26 +124,35 @@ export const players = [
   export async function fetchHRData() {
     const results = {};
     const summary = [];
-  
+    let calRaleighGameLog = null;
+
     await Promise.all(players.map(async p => {
       const url = `https://statsapi.mlb.com/api/v1/people/${p.id}/stats?stats=gameLog&season=${p.season}&group=hitting`;
       const res  = await fetch(url);
       if (!res.ok) throw new Error(`HR data failed for ${p.label}`);
       const json = await res.json();
       const games = (json.stats[0]?.splits || []).reverse();
-  
+
       let totalHR = 0;
       const progression = games.map(g => {
         totalHR += Number(g.stat.homeRuns || 0);
         return totalHR;
       });
-  
+
       const teamGames = await fetchTeamGamesPlayed(p.teamId, p.season);
       results[p.label] = progression;
       summary.push({ label: p.label, totalHR, gamesPlayed: progression.length, teamGamesPlayed: teamGames });
+
+      // If Cal Raleigh 2025, also collect date and homeRuns for each game
+      if (p.label === 'Cal Raleigh 2025') {
+        calRaleighGameLog = games.map(g => ({
+          date: g.date,
+          homeRuns: Number(g.stat.homeRuns || 0)
+        }));
+      }
     }));
-  
-    return { results, summary };
+
+    return { results, summary, calRaleighGameLog };
   }
   
   export async function fetchSeasonStats() {

@@ -4,7 +4,7 @@
 
 .stat-block {
   background: var(--dark-bg);
-  border: 4px solid var(--mariners-green);
+  border: 4px solid var(--mariners-navy);
   border-radius: var(--border-radius);
   padding: 30px;
   box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
@@ -36,7 +36,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid rgba(0, 255, 0, 0.3);
-  border-top: 4px solid var(--mariners-green);
+  border-top: 4px solid var(--mariners-navy);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

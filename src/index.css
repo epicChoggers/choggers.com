@@ -1,8 +1,9 @@
 :root {
-  --mariners-green: #00FF00;
-  --mariners-navy: #0A0A14;
-  --mariners-silver: #c4ced4;
-  --highlight: #00FF00;
+  --mariners-navy: #0C2C56;
+  --mariners-green: #005C5C;
+  --mariners-silver: #C4CED4;
+  --mariners-red: #D50032;
+  --highlight: #0C2C56;
   --dark-bg: #0A0A14;
   --table-header-bg: #1A2B3C;
   --table-row-alt: #161b22;

@@ -112,14 +112,14 @@ const ChartSection = ({ data, mode, loading }) => {
   
   // Extended color palette with 20+ unique colors - reorganized to avoid similar colors
   const colors = [
-    '#00FF00', // Mariners green (Cal Raleigh)
+    '#005C5C', // Mariners green (Cal Raleigh)
     '#FF6B35', // Orange
     '#9370DB', // Medium Purple
     '#FFD700', // Gold
     '#DC143C', // Crimson
     '#20B2AA', // Light Sea Green
     '#FF69B4', // Hot Pink
-    '#32CD32', // Lime Green
+    '#005C5C', // Mariners green (was Lime Green)
     '#8A2BE2', // Blue Violet
     '#FF8C00', // Dark Orange
     '#00CED1', // Dark Turquoise
@@ -201,7 +201,7 @@ const ChartSection = ({ data, mode, loading }) => {
       title: {
         display: true,
         text: mode === 'current' ? 'Current Season HR Leaders Pace' : 'Historical HR Pace Comparison',
-        color: '#00FF00',
+        color: '#005C5C',
         font: {
           family: 'Roboto Mono',
           size: 18,
@@ -210,9 +210,9 @@ const ChartSection = ({ data, mode, loading }) => {
       },
       tooltip: {
         backgroundColor: 'rgba(10, 10, 20, 0.9)',
-        titleColor: '#00FF00',
+        titleColor: '#005C5C',
         bodyColor: '#c4ced4',
-        borderColor: '#00FF00',
+        borderColor: '#005C5C',
         borderWidth: 1,
         cornerRadius: 8,
         displayColors: true,

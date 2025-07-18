@@ -3,7 +3,7 @@ import { TrendingUp, Users, ExternalLink } from 'lucide-react'
 import './Header.css'
 import { spotracLinks } from '../utils/data'
 
-const Header = ({ mode, robberyCount, onModeChange, dollarPerDump }) => {
+const Header = ({ mode, robberyCount, onModeChange, dollarPerDump, daysSinceDump }) => {
   const [humpyHover, setHumpyHover] = useState(false);
   const handleToggle = () => {
     const newMode = mode === 'historical' ? 'current' : 'historical'
@@ -21,7 +21,7 @@ const Header = ({ mode, robberyCount, onModeChange, dollarPerDump }) => {
   return (
     <header className="header">
       <div className="header-content">
-        <div className="header-left">
+        <div className="header-stats-row">
           <div className="toggle-container">
             <label className="toggle-switch">
               <input 
@@ -31,32 +31,34 @@ const Header = ({ mode, robberyCount, onModeChange, dollarPerDump }) => {
               />
               <span className="slider"></span>
             </label>
-            <span className="toggle-label">
-              {mode === 'current' ? 'Current Season HR Leaders' : 'Historical HR Pace'}
+          </div>
+
+          <div className="dollar-per-dump-header-block">
+            <span className="dollar-per-dump-header-label">
+              Dollar per Dump:
+            </span>
+            <span className="dollar-per-dump-header-value">
+              <a
+                href={calRefLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+              >
+                {dollarPerDump} <ExternalLink size={16} style={{ verticalAlign: 'middle' }} />
+              </a>
             </span>
           </div>
-        </div>
 
-        <div className="dollar-per-dump-header-block">
-          <span className="dollar-per-dump-header-label">
-            Dollar per Dump:
-          </span>
-          <span className="dollar-per-dump-header-value">
-            <a
-              href={calRefLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}
-            >
-              {dollarPerDump} <ExternalLink size={16} style={{ verticalAlign: 'middle' }} />
-            </a>
-          </span>
-        </div>
+          <div className="days-since-dump-block">
+            <span className="days-since-dump-label">Days since a Dump:</span>
+            <span className="days-since-dump-value">{daysSinceDump}</span>
+          </div>
 
-       <div className="days-since-playoff-block">
-         <span className="days-since-playoff-label">Days since a playoff game:</span>
-         <span className="days-since-playoff-value">{daysSincePlayoff}</span>
-       </div>
+          <div className="days-since-playoff-block">
+            <span className="days-since-playoff-label">Days since a playoff game:</span>
+            <span className="days-since-playoff-value">{daysSincePlayoff}</span>
+          </div>
+        </div>
 
         <div className={`header-right${humpyHover ? ' humpy-hover' : ''}`}> 
           <img

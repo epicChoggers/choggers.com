@@ -135,7 +135,7 @@ tr:hover {
 
 .dollar-per-dump-value:hover {
   background: #dc2626;
-  color: #00ff00;
+  color: var(--mariners-green);
   transform: scale(1.05);
 }
 
