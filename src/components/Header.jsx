@@ -21,18 +21,17 @@ const Header = ({ mode, robberyCount, onModeChange, dollarPerDump, daysSinceDump
   return (
     <header className="header">
       <div className="header-content">
-        <div className="header-stats-row">
-          <div className="toggle-container">
-            <label className="toggle-switch">
-              <input 
-                type="checkbox" 
-                checked={mode === 'current'}
-                onChange={handleToggle}
-              />
-              <span className="slider"></span>
-            </label>
-          </div>
-
+        <div className="toggle-container toggle-center">
+          <label className="toggle-switch">
+            <input 
+              type="checkbox" 
+              checked={mode === 'current'}
+              onChange={handleToggle}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
+        <div className="header-stats-grid">
           <div className="dollar-per-dump-header-block">
             <span className="dollar-per-dump-header-label">
               Dollar per Dump:
@@ -48,26 +47,15 @@ const Header = ({ mode, robberyCount, onModeChange, dollarPerDump, daysSinceDump
               </a>
             </span>
           </div>
-
           <div className="days-since-dump-block">
             <span className="days-since-dump-label">Days since a Dump:</span>
             <span className="days-since-dump-value">{daysSinceDump}</span>
           </div>
-
           <div className="days-since-playoff-block">
             <span className="days-since-playoff-label">Days since a playoff game:</span>
             <span className="days-since-playoff-value">{daysSincePlayoff}</span>
           </div>
-        </div>
-
-        <div className={`header-right${humpyHover ? ' humpy-hover' : ''}`}> 
-          <img
-            src="/humpy.png"
-            alt="Humpy peeking"
-            className="humpy-peek"
-          />
-          <div 
-            className="countdown-display"
+          <div className="countdown-display"
             onMouseEnter={() => setHumpyHover(true)}
             onMouseLeave={() => setHumpyHover(false)}
             onFocus={() => setHumpyHover(true)}
@@ -79,6 +67,14 @@ const Header = ({ mode, robberyCount, onModeChange, dollarPerDump, daysSinceDump
             <span className="countdown-number">{robberyCount}</span>
           </div>
         </div>
+        {humpyHover && (
+          <div className="humpy-peek-fixed">
+            <img
+              src="/humpy.png"
+              alt="Humpy peeking"
+            />
+          </div>
+        )}
       </div>
     </header>
   )

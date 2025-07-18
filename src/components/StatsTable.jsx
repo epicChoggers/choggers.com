@@ -15,8 +15,12 @@ const StatsTable = ({ data }) => {
     sortedData = sortedData.sort((a, b) => a.label.localeCompare(b.label));
   }
 
-  const formatNumber = (value) => {
+  const formatNumber = (value, isRate = false) => {
     if (value === 'N/A') return 'N/A';
+    if (isRate) {
+      // Always show 3 decimal places for rate stats
+      return Number(value).toFixed(3);
+    }
     return typeof value === 'number' ? value.toLocaleString() : value;
   };
 
@@ -43,10 +47,10 @@ const StatsTable = ({ data }) => {
                 <tr key={row.label} className={index === 0 ? 'highlighted-row' : ''}>
                   <td className="player-name">{row.label}</td>
                   <td>{formatNumber(row.HR)}</td>
-                  <td>{formatNumber(row.AVG)}</td>
-                  <td>{formatNumber(row.OBP)}</td>
-                  <td>{formatNumber(row.SLG)}</td>
-                  <td>{formatNumber(row.OPS)}</td>
+                  <td>{formatNumber(row.AVG, true)}</td>
+                  <td>{formatNumber(row.OBP, true)}</td>
+                  <td>{formatNumber(row.SLG, true)}</td>
+                  <td>{formatNumber(row.OPS, true)}</td>
                   <td>{formatNumber(row.AB_HR)}</td>
                   <td>
                     {spotracLinks[row.label] && (
