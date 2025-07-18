@@ -98,12 +98,12 @@ const ChartSection = ({ data, mode, loading }) => {
     }
   }
 
-  // Order datasets to put Cal Raleigh first
+  // Order datasets to put Cal Raleigh first, then the rest alphabetically
   const topOrder = ['Cal Raleigh 2025', 'Cal Raleigh 2025 Projected']
   const allLabels = Object.keys(processedData.results)
   const ordered = [
     ...topOrder.filter(l => allLabels.includes(l)),
-    ...allLabels.filter(l => !topOrder.includes(l))
+    ...allLabels.filter(l => !topOrder.includes(l)).sort()
   ]
 
   // Create alphabetical color mapping for consistent colors
@@ -221,10 +221,16 @@ const ChartSection = ({ data, mode, loading }) => {
             return `Game ${context[0].label}`
           },
           label: (context) => {
-            const label = context.dataset.label
-            const isProjected = label.includes('Projected')
-            const suffix = isProjected ? ' (projected)' : ''
-            return `${label}: ${context.parsed.y} HR${suffix}`
+            // This callback is called for each item, but we want to sort all items by HR count
+            // So we sort in the itemSort callback below
+            const label = context.dataset.label;
+            const isProjected = label.includes('Projected');
+            const suffix = isProjected ? ' (projected)' : '';
+            return `${label}: ${context.parsed.y} HR${suffix}`;
+          },
+          itemSort: (a, b) => {
+            // Sort by HR count (parsed.y) descending
+            return b.parsed.y - a.parsed.y;
           }
         }
       },
@@ -232,6 +238,8 @@ const ChartSection = ({ data, mode, loading }) => {
       customHeadshot: {
         id: 'customHeadshot',
         afterDraw: (chart) => {
+          // Hide headshot if tooltip is active (user is hovering)
+          if (chart.tooltip?._active?.length > 0) return;
           const ctx = chart.ctx
           const calRaleighDataset = chart.data.datasets.find(dataset => 
             dataset.label === 'Cal Raleigh 2025'

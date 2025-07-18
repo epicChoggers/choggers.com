@@ -162,6 +162,7 @@ export const players = [
   
       data.push({
         label:  p.label,
+        HR:     hr,
         AVG:    parseFloat(stat.avg) || 'N/A',
         OBP:    parseFloat(stat.obp) || 'N/A',
         SLG:    parseFloat(stat.slg) || 'N/A',

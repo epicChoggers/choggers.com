@@ -62,6 +62,12 @@ function App() {
     }
   }
 
+  // Find Cal Raleigh 2025's DollarPerHR value for the header
+  const cal = statsData.find(row => row && row.label === 'Cal Raleigh 2025');
+  const dollarPerDump = cal && cal.DollarPerHR !== 'N/A'
+    ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(cal.DollarPerHR)
+    : 'N/A';
+
   if (loading && chartData.summary.length === 0) {
     return (
       <div className="app">
@@ -86,6 +92,7 @@ function App() {
         mode={mode} 
         robberyCount={robberyCount}
         onModeChange={handleModeChange}
+        dollarPerDump={dollarPerDump}
       />
       <main className="content">
         {error && (

@@ -3,6 +3,8 @@
   padding: 20px;
   border-bottom: 2px solid var(--mariners-green);
   box-shadow: 0 2px 10px rgba(0, 255, 0, 0.1);
+  position: relative;
+  z-index: 10;
 }
 
 .header-content {
@@ -55,6 +57,9 @@
   align-items: center;
   justify-content: flex-end;
   flex: 1;
+  position: relative;
+  z-index: 2;
+  gap: 20px;
 }
 
 .toggle-container {
@@ -71,6 +76,24 @@
   transition: var(--transition);
 }
 
+.humpy-peek {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%) scaleY(-1);
+  bottom: -90px;
+  width: 120px;
+  height: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.4,1.6,0.4,1), opacity 0.3s;
+  z-index: 2;
+}
+
+.header-right.humpy-hover .humpy-peek {
+  opacity: 1;
+  transform: translateX(-50%) translateY(10%) scaleY(-1);
+}
+
 .countdown-display {
   background: linear-gradient(145deg, #dc2626, #b91c1c);
   border: 2px solid #ef4444;
@@ -81,6 +104,20 @@
   gap: 8px;
   box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
   transition: var(--transition);
+  position: relative;
+  z-index: 3;
+  overflow: visible;
+  min-width: 320px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 8px 24px;
+  box-sizing: border-box;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .countdown-display:hover {
@@ -89,21 +126,40 @@
 }
 
 .countdown-label {
-  color: #ffffff;
-  font-size: 12px;
+  color: #fff;
+  font-size: 18px;
   font-weight: bold;
+  margin-right: 12px;
+  letter-spacing: 1px;
   white-space: nowrap;
 }
 
 .countdown-number {
-  color: #ffffff;
-  font-size: 16px;
+  color: #fff;
+  font-size: 18px;
   font-weight: bold;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 4px 8px;
-  border-radius: 8px;
-  min-width: 24px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 6px 18px;
+  min-width: 48px;
   text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.countdown-label:hover + .countdown-number + .humpy-peek,
+.countdown-label:focus + .countdown-number + .humpy-peek {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10%) scaleY(-1);
+}
+
+.countdown-display:hover .humpy-peek,
+.countdown-display:focus-within .humpy-peek {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10%) scaleY(-1);
 }
 
 /* Toggle Switch Styles */
@@ -154,6 +210,10 @@
   background-color: var(--dark-bg);
 }
 
+.countdown-label:hover {
+  cursor: pointer;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header-content {
@@ -202,4 +262,135 @@
   .toggle-label {
     font-size: 12px;
   }
+} 
+
+.dollar-per-dump-header-block,
+.days-since-playoff-block,
+.countdown-display {
+  flex: 1;
+  max-width: 340px;
+  min-width: 200px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  gap: 10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.dollar-per-dump-header-block {
+  background: linear-gradient(145deg, #059669, #047857);
+  border: 2px solid #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+}
+
+.days-since-playoff-block {
+  background: linear-gradient(145deg, #2563eb, #1e40af);
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
+}
+
+.countdown-display {
+  background: linear-gradient(145deg, #dc2626, #b91c1c);
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+
+.dollar-per-dump-header-label,
+.days-since-playoff-label,
+.countdown-label {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 8px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dollar-per-dump-header-value,
+.days-since-playoff-value,
+.countdown-number {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 4px 12px;
+  min-width: 32px;
+  max-width: 120px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  justify-content: center;
+}
+
+.dollar-per-dump-header-value:hover {
+  background: #047857;
+  color: #fff200;
+  transform: scale(1.05);
+} 
+
+.days-since-playoff-block {
+  background: linear-gradient(145deg, #2563eb, #1e40af);
+  border: 2px solid #3b82f6;
+  border-radius: 20px;
+  padding: 8px 24px;
+  min-width: 320px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
+  font-family: 'Roboto Mono', monospace;
+  margin-left: 0;
+  box-sizing: border-box;
+  gap: 12px;
+}
+
+.days-since-playoff-label {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 8px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.days-since-playoff-value {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 4px 12px;
+  min-width: 32px;
+  max-width: 120px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  justify-content: center;
 } 
