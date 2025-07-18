@@ -59,8 +59,8 @@ const ChartSection = ({ data, mode, loading }) => {
     key.includes('Cal Raleigh') && key.includes('2025')
   )
   
-  // Add projection dataset if Cal Raleigh exists
-  if (calRaleighKey) {
+  // Add projection dataset if Cal Raleigh exists and mode is historical
+  if (calRaleighKey && mode === 'historical') {
     const cal = data.summary.find(s => s.label === 'Cal Raleigh 2025')
     if (cal) {
       const calGamesPlayed = processedData.results[calRaleighKey].length
