@@ -244,24 +244,6 @@
   .countdown-number {
     font-size: 14px;
   }
-}
-
-@media (max-width: 480px) {
-  .header {
-    padding: 15px;
-  }
-  
-  .header-title {
-    font-size: 20px;
-  }
-  
-  .title-icon {
-    font-size: 20px;
-  }
-  
-  .toggle-label {
-    font-size: 12px;
-  }
 } 
 
 .dollar-per-dump-header-block,
@@ -493,5 +475,37 @@
   }
   50% {
     transform: scaleY(-1) translateY(-20px);
+  }
+} 
+
+@media (max-width: 600px) {
+  .header-stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 95vw;
+    width: 100%;
+    align-items: center;
+  }
+  .header-stats-grid > * {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0 auto;
+  }
+  .toggle-center {
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .dollar-per-dump-header-block,
+  .days-since-dump-block,
+  .days-since-playoff-block,
+  .countdown-display {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    font-size: 16px;
   }
 } 
