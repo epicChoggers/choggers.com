@@ -52,6 +52,24 @@
   font-weight: bold;
 }
 
+.no-data-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  background-color: var(--mariners-navy);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.no-data-message p {
+  color: var(--mariners-silver);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  text-align: center;
+  margin: 0;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .stat-block {

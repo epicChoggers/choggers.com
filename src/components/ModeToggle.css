@@ -1,0 +1,26 @@
+.mode-toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.mode-toggle {
+  display: flex;
+  background: var(--mariners-navy);
+  border: 2px solid var(--mariners-silver);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .mode-toggle {
+    flex-direction: column;
+    gap: 2px;
+  }
+} 

@@ -1,0 +1,288 @@
+.bullpen-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.section-header h2 {
+  color: var(--mariners-teal);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+}
+
+.period-info {
+  color: var(--mariners-silver);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  margin: 0;
+}
+
+.bullpen-summary {
+  background-color: var(--mariners-navy);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-stats {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.summary-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-label {
+  color: var(--mariners-silver);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  color: var(--mariners-teal);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.spreadsheet-container {
+  background-color: var(--mariners-navy);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 20px;
+}
+
+.spreadsheet-header {
+  margin-bottom: 20px;
+}
+
+.spreadsheet-header h3 {
+  color: var(--mariners-teal);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 30px;
+}
+
+.bullpen-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+}
+
+.bullpen-table th,
+.bullpen-table td {
+  padding: 8px 12px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bullpen-table th {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--mariners-teal);
+  font-weight: bold;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bullpen-table td {
+  color: var(--mariners-silver);
+}
+
+.pitcher-name {
+  text-align: left !important;
+  font-weight: bold;
+  color: var(--mariners-teal) !important;
+}
+
+.pitcher-row:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.outings-details {
+  margin-top: 30px;
+}
+
+.outings-details h3 {
+  color: var(--mariners-teal);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 15px 0;
+}
+
+.outings-table-container {
+  overflow-x: auto;
+}
+
+.outings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+}
+
+.outings-table th,
+.outings-table td {
+  padding: 6px 8px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.outings-table th {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--mariners-teal);
+  font-weight: bold;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.outings-table td {
+  color: var(--mariners-silver);
+}
+
+.outing-row:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.outing-result {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.outing-result span {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.hold {
+  background-color: #FFD700;
+  color: #000;
+}
+
+.save {
+  background-color: #00FF00;
+  color: #000;
+}
+
+.blown {
+  background-color: #FF4500;
+  color: #fff;
+}
+
+.win {
+  background-color: #32CD32;
+  color: #000;
+}
+
+.loss {
+  background-color: #DC143C;
+  color: #fff;
+}
+
+.appearance {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--mariners-silver);
+}
+
+/* Loading and error states */
+.loading-container,
+.error-message,
+.no-data-message {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 92, 92, 0.3);
+  border-top: 3px solid var(--mariners-teal);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message p,
+.no-data-message p {
+  color: var(--mariners-silver);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .bullpen-section {
+    padding: 15px;
+  }
+  
+  .summary-stats {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .bullpen-table,
+  .outings-table {
+    font-size: 10px;
+  }
+  
+  .bullpen-table th,
+  .bullpen-table td {
+    padding: 6px 8px;
+  }
+  
+  .outings-table th,
+  .outings-table td {
+    padding: 4px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-header h2 {
+    font-size: 20px;
+  }
+  
+  .bullpen-table,
+  .outings-table {
+    font-size: 9px;
+  }
+  
+  .pitcher-name {
+    font-size: 10px;
+  }
+} 

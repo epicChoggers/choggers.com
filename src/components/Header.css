@@ -62,19 +62,7 @@
   gap: 20px;
 }
 
-.toggle-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 
-.toggle-label {
-  font-size: 14px;
-  color: var(--highlight);
-  font-weight: bold;
-  white-space: nowrap;
-  transition: var(--transition);
-}
 
 .humpy-peek {
   position: absolute;
@@ -94,125 +82,11 @@
   transform: translateX(-50%) translateY(10%) scaleY(-1);
 }
 
-.countdown-display {
-  background: linear-gradient(145deg, #dc2626, #b91c1c);
-  border: 2px solid #ef4444;
-  border-radius: 20px;
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
-  transition: var(--transition);
-  position: relative;
-  z-index: 3;
-  overflow: visible;
-  min-width: 320px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 20px;
-  padding: 8px 24px;
-  box-sizing: border-box;
-  font-family: 'Roboto Mono', monospace;
-}
 
-.countdown-display:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-}
 
-.countdown-label {
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
-  margin-right: 12px;
-  letter-spacing: 1px;
-  white-space: nowrap;
-}
 
-.countdown-number {
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
-  background: rgba(0,0,0,0.2);
-  border-radius: 10px;
-  padding: 6px 18px;
-  min-width: 48px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: background 0.2s, color 0.2s, transform 0.2s;
-}
 
-.countdown-label:hover + .countdown-number + .humpy-peek,
-.countdown-label:focus + .countdown-number + .humpy-peek {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-10%) scaleY(-1);
-}
 
-.countdown-display:hover .humpy-peek,
-.countdown-display:focus-within .humpy-peek {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-10%) scaleY(-1);
-}
-
-/* Toggle Switch Styles */
-.toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #333;
-  transition: var(--transition);
-  border-radius: 24px;
-  border: 2px solid var(--mariners-navy);
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 2px;
-  bottom: 2px;
-  background-color: var(--mariners-navy);
-  transition: var(--transition);
-  border-radius: 50%;
-}
-
-.toggle-switch input:checked + .slider {
-  background-color: var(--mariners-navy);
-}
-
-.toggle-switch input:checked + .slider:before {
-  transform: translateX(26px);
-  background-color: var(--dark-bg);
-}
-
-.countdown-label:hover {
-  cursor: pointer;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -233,149 +107,15 @@
     order: -1;
   }
   
-  .countdown-display {
-    padding: 6px 12px;
-  }
-  
-  .countdown-label {
-    font-size: 11px;
-  }
-  
-  .countdown-number {
-    font-size: 14px;
+  .navigation-tabs {
+    margin-right: 0;
+    margin-bottom: 10px;
   }
 } 
 
-.dollar-per-dump-header-block,
-.days-since-playoff-block,
-.countdown-display {
-  flex: 1;
-  max-width: 340px;
-  min-width: 200px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  border-radius: 20px;
-  padding: 0 16px;
-  box-sizing: border-box;
-  gap: 10px;
-  text-align: center;
-  overflow: hidden;
-}
+ 
 
-.dollar-per-dump-header-block {
-  background: linear-gradient(145deg, #059669, #047857);
-  border: 2px solid #10b981;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
-}
-
-.days-since-playoff-block {
-  background: linear-gradient(145deg, #2563eb, #1e40af);
-  border: 2px solid #3b82f6;
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
-}
-
-.countdown-display {
-  background: linear-gradient(145deg, #dc2626, #b91c1c);
-  border: 2px solid #ef4444;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
-}
-
-.dollar-per-dump-header-label,
-.days-since-playoff-label,
-.countdown-label {
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  margin-right: 8px;
-  letter-spacing: 1px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.dollar-per-dump-header-value,
-.days-since-playoff-value,
-.countdown-number {
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  background: rgba(0,0,0,0.2);
-  border-radius: 10px;
-  padding: 4px 12px;
-  min-width: 32px;
-  max-width: 120px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: background 0.2s, color 0.2s, transform 0.2s;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  justify-content: center;
-}
-
-.dollar-per-dump-header-value:hover {
-  background: #047857;
-  color: #fff200;
-  transform: scale(1.05);
-} 
-
-.days-since-playoff-block {
-  background: linear-gradient(145deg, #2563eb, #1e40af);
-  border: 2px solid #3b82f6;
-  border-radius: 20px;
-  padding: 8px 24px;
-  min-width: 320px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
-  box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
-  font-family: 'Roboto Mono', monospace;
-  margin-left: 0;
-  box-sizing: border-box;
-  gap: 12px;
-}
-
-.days-since-playoff-label {
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  margin-right: 8px;
-  letter-spacing: 1px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  text-align: center;
-}
-
-.days-since-playoff-value {
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  background: rgba(0,0,0,0.2);
-  border-radius: 10px;
-  padding: 4px 12px;
-  min-width: 32px;
-  max-width: 120px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: background 0.2s, color 0.2s, transform 0.2s;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  justify-content: center;
-} 
+ 
 
 .header-stats-grid {
   display: grid;
@@ -388,12 +128,7 @@
   max-width: 800px;
 }
 
-.toggle-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 18px;
-}
+
 
 .header-stats-row {
   display: contents;
@@ -403,53 +138,7 @@
   display: none;
 }
 
-.days-since-dump-block {
-  background: linear-gradient(145deg, #0ea5e9, #0369a1);
-  border: 2px solid #38bdf8;
-  border-radius: 20px;
-  padding: 8px 24px;
-  min-width: 200px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: 0 0 8px rgba(14, 165, 233, 0.2);
-  box-sizing: border-box;
-  gap: 10px;
-  text-align: center;
-  overflow: hidden;
-}
-
-.days-since-dump-label {
-  color: #fff;
-  font-size: 12px;
-  font-weight: 500;
-  margin-right: 4px;
-}
-
-.days-since-dump-value {
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  background: rgba(0,0,0,0.2);
-  border-radius: 10px;
-  padding: 4px 12px;
-  min-width: 32px;
-  max-width: 120px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: background 0.2s, color 0.2s, transform 0.2s;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  justify-content: center;
-} 
+ 
 
 .humpy-peek-fixed {
   position: fixed;
@@ -493,19 +182,70 @@
     min-width: 0;
     margin: 0 auto;
   }
-  .toggle-center {
-    justify-content: center;
-    margin-bottom: 12px;
+
+
+} 
+
+.navigation-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 8px 16px;
+  margin-right: 20px;
+  max-width: 400px;
+}
+
+@media (max-width: 600px) {
+  .navigation-tabs {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(2, auto);
+    gap: 6px 8px;
+    margin-right: 0;
+    max-width: 95vw;
   }
-  .dollar-per-dump-header-block,
-  .days-since-dump-block,
-  .days-since-playoff-block,
-  .countdown-display {
-    min-width: 0;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 0 auto;
-    font-size: 16px;
+} 
+
+.hamburger-menu-btn {
+  display: none;
+}
+
+.hamburger-btn {
+  background: none;
+  border: none;
+  color: var(--mariners-silver);
+  cursor: pointer;
+  padding: 8px;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  z-index: 20;
+}
+
+@media (max-width: 700px) {
+  .hamburger-menu-btn {
+    display: block;
+    position: relative;
+    z-index: 21;
+  }
+  .navigation-tabs {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--mariners-navy);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+    border-radius: 0 0 16px 16px;
+    padding: 24px 0 12px 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, auto);
+    gap: 12px 0;
+    max-width: 100vw;
+    margin: 0;
+    z-index: 20;
+    justify-items: center;
+  }
+  .navigation-tabs.open {
+    display: grid;
   }
 } 

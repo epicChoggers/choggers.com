@@ -13,6 +13,7 @@ import {
 } from 'chart.js'
 import './ChartSection.css'
 import headshotUrl from '../assets/PlayerHeadshot.png'
+import ModeFilter from './ModeFilter'
 
 ChartJS.register(
   CategoryScale,
@@ -25,7 +26,7 @@ ChartJS.register(
   Filler
 )
 
-const ChartSection = ({ data, mode, loading }) => {
+const ChartSection = ({ data, mode, loading, onModeChange }) => {
   // Load Cal Raleigh headshot
   React.useEffect(() => {
     const headshotImg = new Image()
@@ -234,13 +235,15 @@ const ChartSection = ({ data, mode, loading }) => {
           }
         }
       },
-      // Custom plugin to add Cal Raleigh headshot
+      // Custom plugin to add Cal Raleigh headshot and asterisks for suspected steroid users
       customHeadshot: {
         id: 'customHeadshot',
         afterDraw: (chart) => {
           // Hide headshot if tooltip is active (user is hovering)
           if (chart.tooltip?._active?.length > 0) return;
           const ctx = chart.ctx
+          
+          // Draw Cal Raleigh headshot
           const calRaleighDataset = chart.data.datasets.find(dataset => 
             dataset.label === 'Cal Raleigh 2025'
           )
@@ -282,6 +285,37 @@ const ChartSection = ({ data, mode, loading }) => {
               }
             }
           }
+          
+          // Draw asterisks for suspected steroid users
+          const suspectedUsers = ['Barry Bonds 2001', 'Mark McGwire 1998', 'Sammy Sosa 1998']
+          
+          suspectedUsers.forEach(playerName => {
+            const dataset = chart.data.datasets.find(d => d.label === playerName)
+            if (dataset) {
+              const datasetIndex = chart.data.datasets.indexOf(dataset)
+              const meta = chart.getDatasetMeta(datasetIndex)
+              
+              // Find the last data point for this player
+              const playerData = processedData.results[playerName]
+              if (playerData && playerData.length > 0) {
+                const lastDataIndex = playerData.length - 1
+                if (meta.data[lastDataIndex]) {
+                  const point = meta.data[lastDataIndex]
+                  const x = point.x
+                  const y = point.y
+                  
+                  // Draw asterisk
+                  ctx.save()
+                  ctx.fillStyle = dataset.borderColor
+                  ctx.font = 'bold 16px Roboto Mono'
+                  ctx.textAlign = 'center'
+                  ctx.textBaseline = 'middle'
+                  ctx.fillText('*', x + 15, y - 15) // Position asterisk to the right and above the line end
+                  ctx.restore()
+                }
+              }
+            }
+          })
         }
       }
     },
@@ -337,6 +371,10 @@ const ChartSection = ({ data, mode, loading }) => {
 
   return (
     <div className="chart-section">
+      <ModeFilter 
+        selectedMode={mode}
+        onModeChange={onModeChange}
+      />
       <div className="stat-block">
         <div className="chart-container">
           <Line data={chartData} options={options} plugins={[options.plugins.customHeadshot]} />

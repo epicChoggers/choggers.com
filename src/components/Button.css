@@ -1,0 +1,119 @@
+.button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: var(--mariners-silver);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  white-space: nowrap;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.button--active {
+  background-color: var(--mariners-teal);
+  border-color: var(--mariners-teal);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 92, 92, 0.3);
+}
+
+.button svg {
+  transition: transform 0.2s ease;
+}
+
+.button:hover svg {
+  transform: scale(1.1);
+}
+
+/* Size variants */
+.button--small {
+  padding: 8px 12px;
+  font-size: 12px;
+  min-width: 100px;
+}
+
+.button--medium {
+  padding: 12px 16px;
+  font-size: 14px;
+  min-width: 120px;
+}
+
+.button--large {
+  padding: 16px 20px;
+  font-size: 16px;
+  min-width: 140px;
+}
+
+/* Variant styles */
+.button--toggle {
+  background: transparent;
+  border: none;
+  color: var(--mariners-silver);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  min-width: 120px;
+}
+
+.button--toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: none;
+}
+
+.button--toggle.button--active {
+  background: var(--mariners-silver);
+  color: var(--mariners-navy);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.button--nav {
+  /* Navigation specific styles - same as default */
+}
+
+/* Focus states */
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .button {
+    padding: 10px 12px;
+    font-size: 12px;
+    min-width: 100px;
+  }
+  
+  .button span {
+    display: none;
+  }
+  
+  .button--toggle {
+    min-width: 140px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 600px) {
+  .button--toggle {
+    min-width: 140px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+} 

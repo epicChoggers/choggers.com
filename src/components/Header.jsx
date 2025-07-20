@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
-import { TrendingUp, Users, ExternalLink } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { Home, Trophy, Users, Star, Menu } from 'lucide-react'
 import './Header.css'
 import { spotracLinks } from '../utils/data'
+import StatCard from './StatCard'
+import Button from './Button'
 
-const Header = ({ mode, robberyCount, onModeChange, dollarPerDump, daysSinceDump }) => {
+const Header = ({ robberyCount, dollarPerDump, daysSinceDump, onPageChange }) => {
   const [humpyHover, setHumpyHover] = useState(false);
-  const handleToggle = () => {
-    const newMode = mode === 'historical' ? 'current' : 'historical'
-    onModeChange(newMode)
-  }
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const calRefLink = spotracLinks['Cal Raleigh 2025'] || '#';
 
@@ -18,54 +20,84 @@ const Header = ({ mode, robberyCount, onModeChange, dollarPerDump, daysSinceDump
   const msPerDay = 1000 * 60 * 60 * 24;
   const daysSincePlayoff = Math.floor((today - playoffDate) / msPerDay);
 
+  const isDivisionRacePage = location.pathname === '/division-race';
+  const isBullpenPage = location.pathname === '/bullpen-overview';
+  const isWildCardPage = location.pathname === '/wildcard-race';
+
+  // Responsive: close menu on route change
+  useEffect(() => { setMenuOpen(false); }, [location.pathname]);
+
   return (
     <header className="header">
       <div className="header-content">
-        <div className="toggle-container toggle-center">
-          <label className="toggle-switch">
-            <input 
-              type="checkbox" 
-              checked={mode === 'current'}
-              onChange={handleToggle}
-            />
-            <span className="slider"></span>
-          </label>
+        <div className="hamburger-menu-btn">
+          <button className="hamburger-btn" onClick={() => setMenuOpen(m => !m)} aria-label="Open navigation menu">
+            <Menu size={28} />
+          </button>
         </div>
+        <nav className={`navigation-tabs${menuOpen ? ' open' : ''}`}>
+          <Button 
+            variant="nav"
+            active={!isDivisionRacePage && !isBullpenPage && !isWildCardPage}
+            onClick={() => navigate('/home')}
+            icon={Home}
+          >
+            Home Run Tracker
+          </Button>
+          <Button 
+            variant="nav"
+            active={isDivisionRacePage}
+            onClick={() => navigate('/division-race')}
+            icon={Trophy}
+          >
+            Division Race
+          </Button>
+          <Button 
+            variant="nav"
+            active={isBullpenPage}
+            onClick={() => navigate('/bullpen-overview')}
+            icon={Users}
+          >
+            Bullpen Overview
+          </Button>
+          <Button 
+            variant="nav"
+            active={isWildCardPage}
+            onClick={() => navigate('/wildcard-race')}
+            icon={Star}
+          >
+            Wild Card Race
+          </Button>
+        </nav>
+        
+
+        
         <div className="header-stats-grid">
-          <div className="dollar-per-dump-header-block">
-            <span className="dollar-per-dump-header-label">
-              Dollar per Dump:
-            </span>
-            <span className="dollar-per-dump-header-value">
-              <a
-                href={calRefLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}
-              >
-                {dollarPerDump} <ExternalLink size={16} style={{ verticalAlign: 'middle' }} />
-              </a>
-            </span>
-          </div>
-          <div className="days-since-dump-block">
-            <span className="days-since-dump-label">Days since a Dump:</span>
-            <span className="days-since-dump-value">{daysSinceDump}</span>
-          </div>
-          <div className="days-since-playoff-block">
-            <span className="days-since-playoff-label">Days since a playoff game:</span>
-            <span className="days-since-playoff-value">{daysSincePlayoff}</span>
-          </div>
-          <div className="countdown-display"
+          <StatCard
+            label="Dollar per Dump:"
+            value={dollarPerDump}
+            variant="dollar"
+            href={calRefLink}
+          />
+          <StatCard
+            label="Days since a Dump:"
+            value={daysSinceDump}
+            variant="days"
+          />
+          <StatCard
+            label="Days since a playoff game:"
+            value={daysSincePlayoff}
+            variant="playoff"
+          />
+          <StatCard
+            label="Times Humpy has been Robbed:"
+            value={robberyCount}
+            variant="robbery"
             onMouseEnter={() => setHumpyHover(true)}
             onMouseLeave={() => setHumpyHover(false)}
             onFocus={() => setHumpyHover(true)}
             onBlur={() => setHumpyHover(false)}
-          >
-            <span className="countdown-label">
-              Times Humpy has been Robbed:
-            </span>
-            <span className="countdown-number">{robberyCount}</span>
-          </div>
+          />
         </div>
         {humpyHover && (
           <div className="humpy-peek-fixed">

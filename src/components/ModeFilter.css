@@ -1,0 +1,87 @@
+.mode-filter {
+  background-color: var(--mariners-navy);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-header {
+  margin-bottom: 15px;
+}
+
+.filter-header h3 {
+  color: var(--mariners-silver);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.filter-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: var(--mariners-silver);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.filter-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.filter-btn.active {
+  background-color: var(--mariners-teal);
+  border-color: var(--mariners-teal);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 92, 92, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .mode-filter {
+    padding: 15px;
+  }
+  
+  .filter-buttons {
+    gap: 8px;
+  }
+  
+  .filter-btn {
+    font-size: 12px;
+    padding: 8px 12px;
+    min-width: 100px;
+  }
+  
+  .filter-header h3 {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .filter-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+} 

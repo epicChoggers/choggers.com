@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import ChartSection from './components/ChartSection'
 import StatsTable from './components/StatsTable'
+import DivisionRacePage from './components/DivisionRacePage'
+import BullpenOverviewPage from './components/BullpenOverviewPage'
+import WildCardRacePage from './components/WildCardRacePage'
 import { fetchHRData, fetchSeasonStats, fetchCurrentSeasonLeadersHRData, fetchMarinersHomeGamesSinceOpeningDay } from './utils/data'
 import './App.css'
 
-function App() {
+function HomeRunTracker() {
   const [mode, setMode] = useState('historical')
   const [robberyCount, setRobberyCount] = useState(0)
   const [chartData, setChartData] = useState({ results: {}, summary: [] })
@@ -13,6 +17,11 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [daysSinceDump, setDaysSinceDump] = useState('N/A')
+
+  const handlePageChange = (page) => {
+    // Navigation will be handled by React Router
+    // This function is kept for compatibility but navigation is done via URL
+  }
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -144,9 +153,10 @@ function App() {
     return (
       <div className="app">
         <Header 
-          mode={mode} 
           robberyCount={robberyCount}
-          onModeChange={handleModeChange}
+          dollarPerDump={dollarPerDump}
+          daysSinceDump={daysSinceDump}
+          onPageChange={handlePageChange}
         />
         <main className="content">
           <div className="loading-container">
@@ -161,11 +171,10 @@ function App() {
   return (
     <div className="app">
       <Header 
-        mode={mode} 
         robberyCount={robberyCount}
-        onModeChange={handleModeChange}
         dollarPerDump={dollarPerDump}
         daysSinceDump={daysSinceDump}
+        onPageChange={handlePageChange}
       />
       <main className="content">
         {error && (
@@ -181,6 +190,7 @@ function App() {
           data={chartData} 
           mode={mode}
           loading={loading}
+          onModeChange={handleModeChange}
         />
         
         {statsData.length > 0 && (
@@ -188,6 +198,28 @@ function App() {
         )}
       </main>
     </div>
+  )
+}
+
+function App() {
+  const [currentPage, setCurrentPage] = useState('home')
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
+  }
+
+  return (
+    <Router>
+      <div className="app">
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<HomeRunTracker />} />
+          <Route path="/division-race" element={<DivisionRacePage />} />
+          <Route path="/bullpen-overview" element={<BullpenOverviewPage />} />
+          <Route path="/wildcard-race" element={<WildCardRacePage />} />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 
