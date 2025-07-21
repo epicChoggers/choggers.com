@@ -82,6 +82,7 @@
 
 .table-container {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-bottom: 30px;
 }
 
@@ -90,6 +91,7 @@
   border-collapse: collapse;
   font-family: 'Roboto Mono', monospace;
   font-size: 12px;
+  min-width: 600px;
 }
 
 .bullpen-table th,
@@ -136,6 +138,7 @@
 
 .outings-table-container {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .outings-table {
@@ -143,6 +146,7 @@
   border-collapse: collapse;
   font-family: 'Roboto Mono', monospace;
   font-size: 11px;
+  min-width: 700px;
 }
 
 .outings-table th,
@@ -259,6 +263,7 @@
   .bullpen-table,
   .outings-table {
     font-size: 10px;
+    min-width: 550px;
   }
   
   .bullpen-table th,
@@ -280,6 +285,7 @@
   .bullpen-table,
   .outings-table {
     font-size: 9px;
+    min-width: 500px;
   }
   
   .pitcher-name {
