@@ -6,6 +6,7 @@ import StatsTable from './components/StatsTable'
 import DivisionRacePage from './components/DivisionRacePage'
 import BullpenOverviewPage from './components/BullpenOverviewPage'
 import WildCardRacePage from './components/WildCardRacePage'
+import QualityStartTrackerPage from './components/QualityStartTrackerPage'
 import { fetchHRData, fetchSeasonStats, fetchCurrentSeasonLeadersHRData, fetchMarinersHomeGamesSinceOpeningDay } from './utils/data'
 import './App.css'
 
@@ -45,12 +46,18 @@ function HomeRunTracker() {
           const sortedLog = [...hrData.calRaleighGameLog].sort((a, b) => new Date(b.date) - new Date(a.date));
           const lastHRGame = sortedLog.find(g => g.homeRuns > 0);
           if (lastHRGame && lastHRGame.date) {
-            const lastHRDate = new Date(lastHRGame.date);
+            // Parse the date string and ensure it's treated as local date
+            // The API returns dates like "2025-07-26" which should be treated as local date
+            const [year, month, day] = lastHRGame.date.split('-').map(Number);
+            const lastHRDate = new Date(year, month - 1, day); // month is 0-indexed
             const today = new Date();
+            
             lastHRDate.setHours(0,0,0,0);
             today.setHours(0,0,0,0);
+            
             const msPerDay = 1000 * 60 * 60 * 24;
             const days = Math.floor((today - lastHRDate) / msPerDay);
+            
             setDaysSinceDump(days);
           } else {
             setDaysSinceDump('N/A');
@@ -93,12 +100,17 @@ function HomeRunTracker() {
               const sortedGames = [...games].sort((a, b) => new Date(b.date) - new Date(a.date));
               const lastHRGame = sortedGames.find(g => Number(g.stat.homeRuns || 0) > 0);
               if (lastHRGame && lastHRGame.date) {
-                const lastHRDate = new Date(lastHRGame.date);
+                // Parse the date string and ensure it's treated as local date
+                const [year, month, day] = lastHRGame.date.split('-').map(Number);
+                const lastHRDate = new Date(year, month - 1, day); // month is 0-indexed
                 const today = new Date();
+                
                 lastHRDate.setHours(0,0,0,0);
                 today.setHours(0,0,0,0);
+                
                 const msPerDay = 1000 * 60 * 60 * 24;
                 const days = Math.floor((today - lastHRDate) / msPerDay);
+                
                 setDaysSinceDump(days);
               } else {
                 setDaysSinceDump('N/A');
@@ -120,12 +132,17 @@ function HomeRunTracker() {
           const sortedLog = [...data.calRaleighGameLog].sort((a, b) => new Date(b.date) - new Date(a.date));
           const lastHRGame = sortedLog.find(g => g.homeRuns > 0);
           if (lastHRGame && lastHRGame.date) {
-            const lastHRDate = new Date(lastHRGame.date);
+            // Parse the date string and ensure it's treated as local date
+            const [year, month, day] = lastHRGame.date.split('-').map(Number);
+            const lastHRDate = new Date(year, month - 1, day); // month is 0-indexed
             const today = new Date();
+            
             lastHRDate.setHours(0,0,0,0);
             today.setHours(0,0,0,0);
+            
             const msPerDay = 1000 * 60 * 60 * 24;
             const days = Math.floor((today - lastHRDate) / msPerDay);
+            
             setDaysSinceDump(days);
           } else {
             setDaysSinceDump('N/A');
@@ -217,6 +234,7 @@ function App() {
           <Route path="/division-race" element={<DivisionRacePage />} />
           <Route path="/bullpen-overview" element={<BullpenOverviewPage />} />
           <Route path="/wildcard-race" element={<WildCardRacePage />} />
+          <Route path="/quality-start-tracker" element={<QualityStartTrackerPage />} />
         </Routes>
       </div>
     </Router>

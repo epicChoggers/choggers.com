@@ -36,6 +36,40 @@ export const players = [
   'Salvador Perez 2021': 'https://www.baseball-reference.com/players/p/perezsa02.shtml#all_br-salaries',
   'Ken Griffey Jr. 1997':'https://www.baseball-reference.com/players/g/griffke02.shtml#all_br-salaries'
 };
+
+// MLB Teams data
+export const mlbTeams = [
+  { id: 136, name: 'Seattle Mariners', abbreviation: 'SEA' },
+  { id: 111, name: 'Boston Red Sox', abbreviation: 'BOS' },
+  { id: 139, name: 'Tampa Bay Rays', abbreviation: 'TB' },
+  { id: 141, name: 'Toronto Blue Jays', abbreviation: 'TOR' },
+  { id: 147, name: 'New York Yankees', abbreviation: 'NYY' },
+  { id: 110, name: 'Baltimore Orioles', abbreviation: 'BAL' },
+  { id: 145, name: 'Chicago White Sox', abbreviation: 'CWS' },
+  { id: 114, name: 'Cleveland Guardians', abbreviation: 'CLE' },
+  { id: 116, name: 'Detroit Tigers', abbreviation: 'DET' },
+  { id: 118, name: 'Kansas City Royals', abbreviation: 'KC' },
+  { id: 142, name: 'Minnesota Twins', abbreviation: 'MIN' },
+  { id: 117, name: 'Houston Astros', abbreviation: 'HOU' },
+  { id: 108, name: 'Los Angeles Angels', abbreviation: 'LAA' },
+  { id: 133, name: 'Oakland Athletics', abbreviation: 'OAK' },
+  { id: 140, name: 'Texas Rangers', abbreviation: 'TEX' },
+  { id: 121, name: 'New York Mets', abbreviation: 'NYM' },
+  { id: 120, name: 'Atlanta Braves', abbreviation: 'ATL' },
+  { id: 146, name: 'Miami Marlins', abbreviation: 'MIA' },
+  { id: 112, name: 'Chicago Cubs', abbreviation: 'CHC' },
+  { id: 113, name: 'Cincinnati Reds', abbreviation: 'CIN' },
+  { id: 158, name: 'Milwaukee Brewers', abbreviation: 'MIL' },
+  { id: 134, name: 'Pittsburgh Pirates', abbreviation: 'PIT' },
+  { id: 138, name: 'St. Louis Cardinals', abbreviation: 'STL' },
+  { id: 109, name: 'Arizona Diamondbacks', abbreviation: 'ARI' },
+  { id: 115, name: 'Colorado Rockies', abbreviation: 'COL' },
+  { id: 119, name: 'Los Angeles Dodgers', abbreviation: 'LAD' },
+  { id: 135, name: 'San Diego Padres', abbreviation: 'SD' },
+  { id: 137, name: 'San Francisco Giants', abbreviation: 'SF' },
+  { id: 144, name: 'Washington Nationals', abbreviation: 'WSH' },
+  { id: 143, name: 'Philadelphia Phillies', abbreviation: 'PHI' }
+];
   
   const teamGamesCache = new Map();
   const marinersHomeGamesCache = new Map();
@@ -718,6 +752,120 @@ export async function fetchBullpenOverview(period = 7) {
       lastUpdated: new Date().toISOString(),
       period: `Last ${period} days`,
       error: 'Failed to load bullpen data'
+    };
+  }
+} 
+
+// Fetch starting pitchers and their quality start data for any team
+export async function fetchStartingPitchersQSData(teamId = 136, season = new Date().getFullYear()) {
+  try {
+    // Default to Mariners team ID is 136
+    
+    // Fetch team roster to get starting pitchers
+    const rosterUrl = `https://statsapi.mlb.com/api/v1/teams/${teamId}/roster?season=${season}`;
+    const rosterResponse = await fetch(rosterUrl);
+    if (!rosterResponse.ok) {
+      throw new Error(`Failed to fetch team roster: ${rosterResponse.status}`);
+    }
+    
+    const rosterData = await rosterResponse.json();
+    const pitchers = rosterData.roster.filter(player => 
+      player.position?.abbreviation === 'P' && 
+      player.status?.code === 'A' // Active players only
+    );
+    
+    // Fetch game logs for each pitcher
+    const startingPitchers = await Promise.all(
+      pitchers.map(async (pitcher) => {
+        const playerId = pitcher.person.id;
+        const playerName = pitcher.person.fullName;
+        const jerseyNumber = pitcher.jerseyNumber;
+        
+        // Fetch pitching game logs for the season
+        const gameLogUrl = `https://statsapi.mlb.com/api/v1/people/${playerId}/stats?stats=gameLog&season=${season}&group=pitching&gameTypes=R`;
+        const gameLogResponse = await fetch(gameLogUrl);
+        
+        if (!gameLogResponse.ok) {
+          return null;
+        }
+        
+        const gameLogData = await gameLogResponse.json();
+        const games = gameLogData.stats?.[0]?.splits || [];
+        
+        // Filter for starting pitcher appearances (games started > 0)
+        const starts = games.filter(game => {
+          const gamesStarted = parseInt(game.stat.gamesStarted || 0);
+          const inningsPitched = parseFloat(game.stat.inningsPitched || 0);
+          return gamesStarted > 0 && inningsPitched > 0;
+        });
+        
+        // Process each start to determine quality starts and game results
+        const processedStarts = starts.map(game => {
+          const inningsPitched = parseFloat(game.stat.inningsPitched || 0);
+          const earnedRuns = parseInt(game.stat.earnedRuns || 0);
+          const isQualityStart = inningsPitched >= 6 && earnedRuns <= 3;
+          
+          // Determine game result (need to fetch box score for team result)
+          const gamePk = game.game?.gamePk;
+          const isWin = parseInt(game.stat.wins || 0) > 0;
+          const isLoss = parseInt(game.stat.losses || 0) > 0;
+          
+          return {
+            date: game.date,
+            opponent: game.opponent?.name || 'Unknown',
+            inningsPitched,
+            earnedRuns,
+            isQualityStart,
+            isWin,
+            isLoss,
+            gamePk,
+            playerId
+          };
+        });
+        
+        // Calculate summary stats
+        const qualityStarts = processedStarts.filter(start => start.isQualityStart);
+        const qualityStartWins = qualityStarts.filter(start => start.isWin);
+        const qualityStartLosses = qualityStarts.filter(start => start.isLoss);
+        
+        return {
+          player: {
+            id: playerId,
+            name: playerName,
+            jerseyNumber: jerseyNumber
+          },
+          starts: processedStarts,
+          summary: {
+            totalStarts: processedStarts.length,
+            qualityStarts: qualityStarts.length,
+            qualityStartWins: qualityStartWins.length,
+            qualityStartLosses: qualityStartLosses.length,
+            nonQualityStarts: processedStarts.length - qualityStarts.length
+          }
+        };
+      })
+    );
+    
+    // Filter out null results and pitchers with no starts
+    const activeStarters = startingPitchers.filter(pitcher => 
+      pitcher && pitcher.starts.length > 0
+    );
+    
+    // Sort by quality starts (descending)
+    activeStarters.sort((a, b) => b.summary.qualityStarts - a.summary.qualityStarts);
+    
+    return {
+      pitchers: activeStarters,
+      lastUpdated: new Date().toISOString(),
+      season: season
+    };
+    
+  } catch (error) {
+    console.error('Error fetching starting pitchers QS data:', error);
+    return {
+      pitchers: [],
+      lastUpdated: new Date().toISOString(),
+      season: season
     };
   }
 } 

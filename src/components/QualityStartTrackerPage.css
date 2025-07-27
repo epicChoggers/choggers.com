@@ -1,0 +1,360 @@
+.qs-tracker-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 30px;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+              url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><rect width="1000" height="600" fill="%23003366"/><circle cx="500" cy="300" r="200" fill="%23006699" opacity="0.3"/><circle cx="500" cy="300" r="150" fill="%230099cc" opacity="0.2"/></svg>');
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  min-height: 80vh;
+}
+
+.qs-tracker-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><defs><filter id="blur"><feGaussianBlur stdDeviation="3"/></filter></defs><rect width="1000" height="600" fill="%23003366" filter="url(%23blur)"/><circle cx="500" cy="300" r="200" fill="%23006699" opacity="0.3" filter="url(%23blur)"/><circle cx="500" cy="300" r="150" fill="%230099cc" opacity="0.2" filter="url(%23blur)"/></svg>');
+  background-size: cover;
+  background-position: center;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+.qs-tracker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 25px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.team-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.team-selector label {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.team-dropdown {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  min-width: 200px;
+  transition: all 0.2s ease;
+}
+
+.team-dropdown:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.team-dropdown:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+}
+
+.team-dropdown option {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.qs-legend {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.legend-color {
+  width: 25px;
+  height: 25px;
+  border-radius: 4px;
+}
+
+.legend-color.qs-win {
+  background-color: #4CAF50;
+}
+
+.legend-color.qs-loss {
+  background-color: #F44336;
+}
+
+.legend-color.no-qs {
+  background-color: #808080;
+}
+
+.qs-tracker-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  margin-bottom: 40px;
+  min-height: 60vh;
+}
+
+.qs-tracker-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  padding: 30px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  white-space: nowrap;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qs-tracker-columns {
+  display: flex;
+  gap: 25px;
+  flex: 1;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.pitcher-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  flex: 1;
+  max-width: 150px;
+}
+
+.pitcher-status {
+  position: absolute;
+  top: -20px;
+  font-size: 2rem;
+  font-weight: bold;
+  z-index: 2;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.pitcher-headshot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.pitcher-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #fff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  position: relative;
+  background: linear-gradient(135deg, #0066cc, #003366);
+}
+
+.pitcher-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pitcher-fallback {
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 2rem;
+  color: white;
+  background: linear-gradient(135deg, #0066cc, #003366);
+}
+
+.qs-tracker-bar {
+  width: 35px;
+  min-height: 400px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.qs-segment {
+  width: 100%;
+  height: 12px;
+  margin: 1px 0;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.qs-segment:hover {
+  transform: scaleY(1.3);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.pitcher-stats {
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  color: #fff;
+  margin-top: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.team-total {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #fff;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin-top: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive design */
+@media (max-width: 1400px) {
+  .qs-tracker-columns {
+    gap: 20px;
+  }
+  
+  .pitcher-column {
+    max-width: 130px;
+  }
+  
+  .pitcher-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .qs-tracker-bar {
+    width: 30px;
+    min-height: 350px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .qs-tracker-columns {
+    gap: 15px;
+  }
+  
+  .pitcher-column {
+    max-width: 110px;
+  }
+  
+  .pitcher-avatar {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .qs-tracker-bar {
+    width: 25px;
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .qs-tracker-main {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .qs-tracker-label {
+    writing-mode: horizontal-tb;
+    padding: 15px 25px;
+    align-self: center;
+  }
+  
+  .qs-tracker-columns {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .pitcher-column {
+    max-width: 100px;
+  }
+  
+  .pitcher-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .qs-tracker-bar {
+    width: 22px;
+    min-height: 250px;
+  }
+  
+  .qs-segment {
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .qs-tracker-container {
+    padding: 20px;
+  }
+  
+  .qs-tracker-columns {
+    gap: 15px;
+  }
+  
+  .pitcher-column {
+    max-width: 80px;
+  }
+  
+  .pitcher-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .qs-tracker-bar {
+    width: 18px;
+    min-height: 200px;
+  }
+  
+  .qs-segment {
+    height: 8px;
+  }
+  
+  .pitcher-stats {
+    font-size: 0.8rem;
+    padding: 5px 8px;
+  }
+} 

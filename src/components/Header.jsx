@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Home, Trophy, Users, Star, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import './Header.css'
 import { spotracLinks } from '../utils/data'
 import StatCard from './StatCard'
@@ -23,6 +23,7 @@ const Header = ({ robberyCount, dollarPerDump, daysSinceDump, onPageChange }) =>
   const isDivisionRacePage = location.pathname === '/division-race';
   const isBullpenPage = location.pathname === '/bullpen-overview';
   const isWildCardPage = location.pathname === '/wildcard-race';
+  const isQualityStartPage = location.pathname === '/quality-start-tracker';
 
   // Responsive: close menu on route change
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
@@ -38,9 +39,8 @@ const Header = ({ robberyCount, dollarPerDump, daysSinceDump, onPageChange }) =>
         <nav className={`navigation-tabs${menuOpen ? ' open' : ''}`}>
           <Button 
             variant="nav"
-            active={!isDivisionRacePage && !isBullpenPage && !isWildCardPage}
+            active={!isDivisionRacePage && !isBullpenPage && !isWildCardPage && !isQualityStartPage}
             onClick={() => navigate('/home')}
-            icon={Home}
           >
             Home Run Tracker
           </Button>
@@ -48,7 +48,6 @@ const Header = ({ robberyCount, dollarPerDump, daysSinceDump, onPageChange }) =>
             variant="nav"
             active={isDivisionRacePage}
             onClick={() => navigate('/division-race')}
-            icon={Trophy}
           >
             Division Race
           </Button>
@@ -56,7 +55,6 @@ const Header = ({ robberyCount, dollarPerDump, daysSinceDump, onPageChange }) =>
             variant="nav"
             active={isBullpenPage}
             onClick={() => navigate('/bullpen-overview')}
-            icon={Users}
           >
             Bullpen Overview
           </Button>
@@ -64,9 +62,15 @@ const Header = ({ robberyCount, dollarPerDump, daysSinceDump, onPageChange }) =>
             variant="nav"
             active={isWildCardPage}
             onClick={() => navigate('/wildcard-race')}
-            icon={Star}
           >
             Wild Card Race
+          </Button>
+          <Button 
+            variant="nav"
+            active={isQualityStartPage}
+            onClick={() => navigate('/quality-start-tracker')}
+          >
+            QS Tracker
           </Button>
         </nav>
         
