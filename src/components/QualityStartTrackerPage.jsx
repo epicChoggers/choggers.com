@@ -170,12 +170,12 @@ function QualityStartTrackerPage() {
           <div className="qs-tracker-main">
             <div className="qs-tracker-label">QS TRACKER</div>
             
-            <div className="qs-tracker-columns">
+                        <div className={`qs-tracker-columns players-${qsData.pitchers.length}`}>
               {qsData.pitchers.map((pitcher, index) => {
                 const status = getPitcherStatus(pitcher, index)
-                              return (
-                <div key={pitcher.player.id} className="pitcher-column">
-                  <div className="pitcher-headshot">
+                return (
+                  <div key={pitcher.player.id} className="pitcher-column">
+                    <div className="pitcher-headshot">
                       <div className="pitcher-avatar">
                         <img 
                           src={`https://midfield.mlbstatic.com/v1/people/${pitcher.player.id}/spots/120`}
