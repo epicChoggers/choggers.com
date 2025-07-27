@@ -290,58 +290,74 @@
 }
 
 @media (max-width: 768px) {
+  .qs-tracker-container {
+    padding: 15px;
+    min-height: auto;
+  }
+  
+  .qs-tracker-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+    margin-bottom: 25px;
+  }
+  
+  .team-selector {
+    justify-content: center;
+  }
+  
+  .team-dropdown {
+    min-width: 180px;
+    font-size: 0.9rem;
+  }
+  
+  .qs-legend {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .legend-item {
+    font-size: 0.9rem;
+  }
+  
+  .legend-color {
+    width: 20px;
+    height: 20px;
+  }
+  
   .qs-tracker-main {
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
+    min-height: auto;
   }
   
   .qs-tracker-label {
     writing-mode: horizontal-tb;
-    padding: 15px 25px;
+    padding: 10px 20px;
     align-self: center;
+    font-size: 1.5rem;
   }
   
   .qs-tracker-columns {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
-  }
-  
-  .pitcher-column {
-    max-width: 100px;
-  }
-  
-  .pitcher-avatar {
-    width: 80px;
-    height: 80px;
-  }
-  
-  .qs-tracker-bar {
-    width: 22px;
-    min-height: 250px;
-  }
-  
-  .qs-segment {
-    height: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .qs-tracker-container {
-    padding: 20px;
-  }
-  
-  .qs-tracker-columns {
-    gap: 15px;
+    gap: 12px;
+    max-width: 100%;
   }
   
   .pitcher-column {
     max-width: 80px;
+    min-width: 70px;
   }
   
   .pitcher-avatar {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
+  }
+  
+  .pitcher-fallback {
+    font-size: 1.2rem;
   }
   
   .qs-tracker-bar {
@@ -354,7 +370,98 @@
   }
   
   .pitcher-stats {
+    font-size: 0.7rem;
+    padding: 4px 6px;
+  }
+  
+  .team-total {
+    font-size: 1.2rem;
+    padding: 15px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .qs-tracker-container {
+    padding: 10px;
+  }
+  
+  .qs-tracker-header {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .team-selector {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .team-selector label {
+    font-size: 1rem;
+  }
+  
+  .team-dropdown {
+    min-width: 160px;
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+  
+  .qs-legend {
+    gap: 10px;
+  }
+  
+  .legend-item {
     font-size: 0.8rem;
-    padding: 5px 8px;
+    gap: 6px;
+  }
+  
+  .legend-color {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .qs-tracker-label {
+    font-size: 1.3rem;
+    padding: 8px 16px;
+  }
+  
+  .qs-tracker-columns {
+    gap: 8px;
+    justify-content: space-around;
+  }
+  
+  .pitcher-column {
+    max-width: 65px;
+    min-width: 60px;
+  }
+  
+  .pitcher-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .pitcher-fallback {
+    font-size: 1rem;
+  }
+  
+  .qs-tracker-bar {
+    width: 15px;
+    min-height: 150px;
+  }
+  
+  .qs-segment {
+    height: 6px;
+  }
+  
+  .pitcher-stats {
+    font-size: 0.65rem;
+    padding: 3px 5px;
+  }
+  
+  .team-total {
+    font-size: 1.1rem;
+    padding: 12px;
+    margin-top: 15px;
   }
 } 
